@@ -3,157 +3,356 @@ alias KwikEMart.Markets.Market
 alias KwikEMart.Offers.{Offer, Category}
 alias KwikEMart.Recipes.Recipe
 
-# --- Kategorien ---
+# ---------------------------------------------------------------------------
+# Kategorien
+# ---------------------------------------------------------------------------
+
 offer_categories =
   [
-    %{name: "Obst & Gemüse", slug: "obst-gemuese", type: "offer", icon: "🥦"},
-    %{name: "Fleisch & Fisch", slug: "fleisch-fisch", type: "offer", icon: "🥩"},
-    %{name: "Milch & Käse", slug: "milch-kaese", type: "offer", icon: "🧀"},
-    %{name: "Brot & Backwaren", slug: "brot-backwaren", type: "offer", icon: "🍞"},
-    %{name: "Getränke", slug: "getraenke", type: "offer", icon: "🍺"}
+    %{name: "Getränke",         slug: "getraenke",      type: "offer", icon: "🥤"},
+    %{name: "Snacks & Imbiss",  slug: "snacks",         type: "offer", icon: "🌭"},
+    %{name: "Frühstück",        slug: "fruehstueck",    type: "offer", icon: "🥣"},
+    %{name: "Eigenmarken",      slug: "eigenmarken",    type: "offer", icon: "⭐"},
+    %{name: "Lotterie & Mehr",  slug: "lotterie",       type: "offer", icon: "🎰"}
   ]
   |> Enum.map(fn attrs ->
-    %Category{} |> Category.changeset(attrs) |> Repo.insert!(on_conflict: :nothing, conflict_target: [:slug, :type])
+    %Category{}
+    |> Category.changeset(attrs)
+    |> Repo.insert!(on_conflict: :nothing, conflict_target: [:slug, :type])
   end)
 
 recipe_categories =
   [
-    %{name: "Frühling", slug: "fruehling", type: "recipe", icon: "🌸"},
-    %{name: "Spargel", slug: "spargel", type: "recipe", icon: "🌿"},
-    %{name: "Salat", slug: "salat", type: "recipe", icon: "🥗"},
-    %{name: "Dessert", slug: "dessert", type: "recipe", icon: "🍮"}
+    %{name: "Apu's Küche",      slug: "apus-kueche",   type: "recipe", icon: "🍛"},
+    %{name: "Homer's Favourites",slug: "homers-favs",   type: "recipe", icon: "🍩"},
+    %{name: "Schnell & Einfach", slug: "schnell",       type: "recipe", icon: "⚡"},
+    %{name: "Vegetarisch",       slug: "vegetarisch",   type: "recipe", icon: "🌿"}
   ]
   |> Enum.map(fn attrs ->
-    %Category{} |> Category.changeset(attrs) |> Repo.insert!(on_conflict: :nothing, conflict_target: [:slug, :type])
+    %Category{}
+    |> Category.changeset(attrs)
+    |> Repo.insert!(on_conflict: :nothing, conflict_target: [:slug, :type])
   end)
 
-[cat_obst, cat_fleisch, cat_milch, cat_brot, cat_getraenke] = offer_categories
-[cat_fruehling, cat_spargel, cat_salat, cat_dessert] = recipe_categories
+[cat_getraenke, cat_snacks, cat_fruehstueck, cat_eigen, cat_lotterie] = offer_categories
+[cat_apu, cat_homer, cat_schnell, cat_veg] = recipe_categories
 
-# --- Märkte ---
+# ---------------------------------------------------------------------------
+# Märkte
+# ---------------------------------------------------------------------------
+
 markets =
   [
-    %{name: "EDEKA Müller", city: "München", zip: "80331", street: "Marienplatz 1", latitude: 48.1374, longitude: 11.5755, region: "Bayern"},
-    %{name: "EDEKA Schneider", city: "Berlin", zip: "10115", street: "Unter den Linden 20", latitude: 52.5163, longitude: 13.3777, region: "Berlin"},
-    %{name: "EDEKA Weber", city: "Hamburg", zip: "20095", street: "Mönckebergstraße 7", latitude: 53.5503, longitude: 10.0006, region: "Hamburg"},
-    %{name: "EDEKA Fischer", city: "Stuttgart", zip: "70173", street: "Königstraße 5", latitude: 48.7775, longitude: 9.1800, region: "Baden-Württemberg"},
-    %{name: "EDEKA Schmidt", city: "Frankfurt", zip: "60313", street: "Zeil 112", latitude: 50.1136, longitude: 8.6825, region: "Hessen"}
+    %{
+      name: "Kwik-E-Mart Springfield Downtown",
+      city: "Springfield",
+      zip: "58008",
+      street: "742 Evergreen Terrace",
+      latitude: 39.7684,
+      longitude: -86.1581,
+      region: "Springfield County"
+    },
+    %{
+      name: "Kwik-E-Mart Shelbyville",
+      city: "Shelbyville",
+      zip: "58030",
+      street: "1 Shelbyville Plaza",
+      latitude: 39.7550,
+      longitude: -86.1400,
+      region: "Springfield County"
+    },
+    %{
+      name: "Kwik-E-Mart Springfield Heights",
+      city: "Springfield",
+      zip: "58012",
+      street: "321 Springfield Heights Blvd",
+      latitude: 39.7800,
+      longitude: -86.1700,
+      region: "Springfield County"
+    },
+    %{
+      name: "Kwik-E-Mart Capital City",
+      city: "Capital City",
+      zip: "60001",
+      street: "99 Capital Mall Drive",
+      latitude: 40.1200,
+      longitude: -86.5000,
+      region: "Capital District"
+    },
+    %{
+      name: "Kwik-E-Mart Ogdenville",
+      city: "Ogdenville",
+      zip: "58099",
+      street: "5 Ogdenville Main St",
+      latitude: 39.9000,
+      longitude: -86.3000,
+      region: "North Tastings"
+    }
   ]
   |> Enum.map(fn attrs ->
     %Market{} |> Market.changeset(attrs) |> Repo.insert!()
   end)
 
-[market_muenchen, market_berlin, market_hamburg, market_stuttgart, market_frankfurt] = markets
+[mkt_downtown, mkt_shelby, mkt_heights, mkt_capital, mkt_ogden] = markets
 
-# --- Angebote (gültig April 2026 – Frühlings-Saison) ---
+# ---------------------------------------------------------------------------
+# Angebote (gültig April–Mai 2026)
+# ---------------------------------------------------------------------------
+
+valid_from = ~D[2026-04-19]
+valid_to   = ~D[2026-05-03]
+
 offers_data = [
-  %{title: "Deutscher Spargel weiß", description: "Frischer Spargel aus der Region, 500g", price: "2.49", original_price: "3.99", discount_percent: 38, image_url: "/images/spargel.jpg", valid_from: ~D[2026-04-14], valid_to: ~D[2026-04-26], market_id: market_muenchen.id, category_id: cat_obst.id},
-  %{title: "Erdbeeren 500g", description: "Süße Frühlings-Erdbeeren", price: "1.99", original_price: "2.99", discount_percent: 33, image_url: "/images/erdbeeren.jpg", valid_from: ~D[2026-04-14], valid_to: ~D[2026-04-26], market_id: market_muenchen.id, category_id: cat_obst.id},
-  %{title: "Bio Babyspinat 150g", description: "Zarter Babyspinat, bio-zertifiziert", price: "1.49", original_price: "1.99", discount_percent: 25, image_url: "/images/spinat.jpg", valid_from: ~D[2026-04-14], valid_to: ~D[2026-04-26], market_id: market_muenchen.id, category_id: cat_obst.id},
-  %{title: "Hähnchenbrust 600g", description: "Frische Hähnchenbrust, aus Bayern", price: "3.99", original_price: "5.49", discount_percent: 27, image_url: "/images/haehnchen.jpg", valid_from: ~D[2026-04-14], valid_to: ~D[2026-04-26], market_id: market_muenchen.id, category_id: cat_fleisch.id},
-  %{title: "Lachs-Filet 400g", description: "Atlantischer Lachs, küchenfertig", price: "4.99", original_price: "7.49", discount_percent: 33, image_url: "/images/lachs.jpg", valid_from: ~D[2026-04-14], valid_to: ~D[2026-04-26], market_id: market_berlin.id, category_id: cat_fleisch.id},
-  %{title: "Grüner Spargel 500g", description: "Knackiger grüner Spargel", price: "2.29", original_price: "3.49", discount_percent: 34, image_url: "/images/gruen-spargel.jpg", valid_from: ~D[2026-04-14], valid_to: ~D[2026-04-26], market_id: market_berlin.id, category_id: cat_obst.id},
-  %{title: "Mozzarella di Bufala 125g", description: "Original Büffelmozzarella", price: "1.79", original_price: "2.49", discount_percent: 28, image_url: "/images/mozzarella.jpg", valid_from: ~D[2026-04-14], valid_to: ~D[2026-04-26], market_id: market_berlin.id, category_id: cat_milch.id},
-  %{title: "Vollkornbrot 750g", description: "Rustikales Vollkornbrot, frisch gebacken", price: "1.99", original_price: "2.79", discount_percent: 29, image_url: "/images/vollkornbrot.jpg", valid_from: ~D[2026-04-14], valid_to: ~D[2026-04-26], market_id: market_berlin.id, category_id: cat_brot.id},
-  %{title: "Radieschen Bund", description: "Knackige Radieschen, regional", price: "0.79", original_price: "1.19", discount_percent: 34, image_url: "/images/radieschen.jpg", valid_from: ~D[2026-04-14], valid_to: ~D[2026-04-26], market_id: market_hamburg.id, category_id: cat_obst.id},
-  %{title: "Rhabarber 500g", description: "Frischer Rhabarber für Kuchen & Kompott", price: "1.29", original_price: "1.79", discount_percent: 28, image_url: "/images/rhabarber.jpg", valid_from: ~D[2026-04-14], valid_to: ~D[2026-04-26], market_id: market_hamburg.id, category_id: cat_obst.id},
-  %{title: "Frische Pasta 500g", description: "Tagliatelle frisch, mit Ei", price: "1.99", original_price: "2.79", discount_percent: 29, image_url: "/images/pasta.jpg", valid_from: ~D[2026-04-14], valid_to: ~D[2026-04-26], market_id: market_hamburg.id, category_id: cat_brot.id},
-  %{title: "Holsten Pils 6x0,5l", description: "Das Hamburger Original", price: "3.99", original_price: "5.49", discount_percent: 27, image_url: "/images/bier.jpg", valid_from: ~D[2026-04-14], valid_to: ~D[2026-04-26], market_id: market_hamburg.id, category_id: cat_getraenke.id},
-  %{title: "Maultaschen 400g", description: "Schwäbische Maultaschen, hausgemacht", price: "2.49", original_price: "3.29", discount_percent: 24, image_url: "/images/maultaschen.jpg", valid_from: ~D[2026-04-14], valid_to: ~D[2026-04-26], market_id: market_stuttgart.id, category_id: cat_fleisch.id},
-  %{title: "Frühlingszwiebeln 2 Bund", description: "Zarte Frühlingszwiebeln", price: "0.99", original_price: "1.49", discount_percent: 34, image_url: "/images/fruehlingszwiebeln.jpg", valid_from: ~D[2026-04-14], valid_to: ~D[2026-04-26], market_id: market_stuttgart.id, category_id: cat_obst.id},
-  %{title: "Berchtesgadener Joghurt 500g", description: "Bio-Vollmilchjoghurt natur", price: "1.49", original_price: "1.99", discount_percent: 25, image_url: "/images/joghurt.jpg", valid_from: ~D[2026-04-14], valid_to: ~D[2026-04-26], market_id: market_stuttgart.id, category_id: cat_milch.id},
-  %{title: "Grüne Soße Kräuter-Mix", description: "7 Frankfurter Kräuter, frisch gemischt", price: "1.79", original_price: "2.49", discount_percent: 28, image_url: "/images/gruene-sosse.jpg", valid_from: ~D[2026-04-14], valid_to: ~D[2026-04-26], market_id: market_frankfurt.id, category_id: cat_obst.id},
-  %{title: "Apfelwein 1l", description: "Hessischer Apfelwein trocken", price: "1.49", original_price: "1.99", discount_percent: 25, image_url: "/images/apfelwein.jpg", valid_from: ~D[2026-04-14], valid_to: ~D[2026-04-26], market_id: market_frankfurt.id, category_id: cat_getraenke.id},
-  %{title: "Handkäse 200g", description: "Hessischer Handkäse mit Musik", price: "1.29", original_price: "1.79", discount_percent: 28, image_url: "/images/handkaese.jpg", valid_from: ~D[2026-04-14], valid_to: ~D[2026-04-26], market_id: market_frankfurt.id, category_id: cat_milch.id},
-  %{title: "Frankfurter Würstchen 6 Stück", description: "Original Frankfurter, geräuchert", price: "2.99", original_price: "3.99", discount_percent: 25, image_url: "/images/wuerstchen.jpg", valid_from: ~D[2026-04-14], valid_to: ~D[2026-04-26], market_id: market_frankfurt.id, category_id: cat_fleisch.id},
-  %{title: "Butter 250g", description: "Deutsche Markenbutter mild gesäuert", price: "1.69", original_price: "2.19", discount_percent: 23, image_url: "/images/butter.jpg", valid_from: ~D[2026-04-14], valid_to: ~D[2026-04-26], market_id: market_frankfurt.id, category_id: cat_milch.id}
+  # Getränke
+  %{
+    title: "Squishee Tropical 0,5l",
+    description: "Der Original Springfield Slush in fruchtig-tropischer Geschmacksrichtung. Jetzt im Sommerangebot!",
+    price: "0.99", original_price: "1.49", discount_percent: 34,
+    image_url: "/images/squishee-tropical.jpg",
+    valid_from: valid_from, valid_to: valid_to,
+    market_id: mkt_downtown.id, category_id: cat_getraenke.id
+  },
+  %{
+    title: "Duff Beer 6-Pack 0,33l",
+    description: "Homers Lieblingsgetränk im praktischen Sixpack. Kalt gestellt und fertig für den Feierabend.",
+    price: "4.99", original_price: "6.99", discount_percent: 29,
+    image_url: "/images/duff-beer.jpg",
+    valid_from: valid_from, valid_to: valid_to,
+    market_id: mkt_downtown.id, category_id: cat_getraenke.id
+  },
+  %{
+    title: "Buzz Cola 1,5l",
+    description: "Springfield's koffeinreichste Cola. Der Favorit von Bart und seinen Freunden.",
+    price: "0.89", original_price: "1.29", discount_percent: 31,
+    image_url: "/images/buzz-cola.jpg",
+    valid_from: valid_from, valid_to: valid_to,
+    market_id: mkt_shelby.id, category_id: cat_getraenke.id
+  },
+  %{
+    title: "Squishee Berry Blast 0,5l",
+    description: "Waldbeeren-Squishee in der limitierten Sommerediton. Nur solange der Vorrat reicht!",
+    price: "0.99", original_price: "1.49", discount_percent: 34,
+    image_url: "/images/squishee-berry.jpg",
+    valid_from: valid_from, valid_to: valid_to,
+    market_id: mkt_heights.id, category_id: cat_getraenke.id
+  },
+
+  # Snacks & Imbiss
+  %{
+    title: "Kwik-E-Mart Hot Dog",
+    description: "Klassischer Springfield Hot Dog – seit 3 Tagen auf der Rolle, garantiert warm. Mit Senf nach Wahl.",
+    price: "1.79", original_price: "2.49", discount_percent: 28,
+    image_url: "/images/hot-dog.jpg",
+    valid_from: valid_from, valid_to: valid_to,
+    market_id: mkt_downtown.id, category_id: cat_snacks.id
+  },
+  %{
+    title: "Ribwich Burger (limitiert)",
+    description: "Der legendäre Ribwich ist zurück! Nur für kurze Zeit – hol ihn dir, bevor Homer alles aufisst.",
+    price: "3.49", original_price: "4.99", discount_percent: 30,
+    image_url: "/images/ribwich.jpg",
+    valid_from: valid_from, valid_to: valid_to,
+    market_id: mkt_downtown.id, category_id: cat_snacks.id
+  },
+  %{
+    title: "Chief Wiggum's Hot Sauce 150ml",
+    description: "Schärfer als das Springfield PD! Handgemachte Hot Sauce mit echten Springfield-Jalapeños.",
+    price: "2.29", original_price: "3.19", discount_percent: 28,
+    image_url: "/images/hot-sauce.jpg",
+    valid_from: valid_from, valid_to: valid_to,
+    market_id: mkt_shelby.id, category_id: cat_snacks.id
+  },
+  %{
+    title: "Springfield Donuts 6 Stück",
+    description: "Pink glasierte Donuts mit Streuseln – Homers ewige Schwäche. Frisch aus dem Kwik-E-Mart-Ofen.",
+    price: "1.99", original_price: "2.99", discount_percent: 33,
+    image_url: "/images/donuts.jpg",
+    valid_from: valid_from, valid_to: valid_to,
+    market_id: mkt_heights.id, category_id: cat_snacks.id
+  },
+
+  # Frühstück
+  %{
+    title: "Krusty-O's Cerealien 500g",
+    description: "Das Frühstücks-Cerealien von Krusty dem Clown! Mit O-Vitamin angereichert (Warnhinweis auf der Rückseite lesen).",
+    price: "2.49", original_price: "3.99", discount_percent: 38,
+    image_url: "/images/krusty-os.jpg",
+    valid_from: valid_from, valid_to: valid_to,
+    market_id: mkt_downtown.id, category_id: cat_fruehstueck.id
+  },
+  %{
+    title: "Apu's Chai Masala Tee 20 Beutel",
+    description: "Apus persönliches Familienrezept aus Indien. Würzig, aromatisch, der perfekte Morgenstart.",
+    price: "1.99", original_price: "2.79", discount_percent: 29,
+    image_url: "/images/chai-masala.jpg",
+    valid_from: valid_from, valid_to: valid_to,
+    market_id: mkt_capital.id, category_id: cat_fruehstueck.id
+  },
+
+  # Eigenmarken
+  %{
+    title: "Apu's Curry-Paste 200g",
+    description: "Apus geheimes Familienrezept – milde bis feurige Currypaste aus echter Springfield-Produktion.",
+    price: "1.79", original_price: "2.49", discount_percent: 28,
+    image_url: "/images/curry-paste.jpg",
+    valid_from: valid_from, valid_to: valid_to,
+    market_id: mkt_downtown.id, category_id: cat_eigen.id
+  },
+  %{
+    title: "Kwik-E-Mart Energie-Riegel 3er-Pack",
+    description: "Für den langen Schichtdienst: Apus bewährter Energie-Riegel. Hält 24 Stunden frisch – genau wie wir.",
+    price: "1.49", original_price: "1.99", discount_percent: 25,
+    image_url: "/images/energie-riegel.jpg",
+    valid_from: valid_from, valid_to: valid_to,
+    market_id: mkt_shelby.id, category_id: cat_eigen.id
+  },
+
+  # Lotterie & Mehr
+  %{
+    title: "Springfield Lottoschein",
+    description: "Diese Woche Jackpot: 42 Millionen Dollar! Holen Sie sich Ihren Schein – Apu verkauft nur Gewinnlos.",
+    price: "1.00", original_price: "1.00", discount_percent: 0,
+    image_url: "/images/lotto.jpg",
+    valid_from: valid_from, valid_to: valid_to,
+    market_id: mkt_downtown.id, category_id: cat_lotterie.id
+  },
+  %{
+    title: "Scratchy's Rubbel-Los",
+    description: "Neu! Das Scratchy-Rubbellos mit Gewinnchancen von 1:1.000.000. Itchy nicht inbegriffen.",
+    price: "2.00", original_price: "2.00", discount_percent: 0,
+    image_url: "/images/rubbellos.jpg",
+    valid_from: valid_from, valid_to: valid_to,
+    market_id: mkt_ogden.id, category_id: cat_lotterie.id
+  }
 ]
 
 Enum.each(offers_data, fn attrs ->
   %Offer{} |> Offer.changeset(attrs) |> Repo.insert!()
 end)
 
-# --- Rezepte (Frühling/Spargel-Saison 2026) ---
+# ---------------------------------------------------------------------------
+# Rezepte (Apu-Edition)
+# ---------------------------------------------------------------------------
+
 recipes_data = [
   %{
-    title: "Spargel mit Sauce Hollandaise",
-    description: "Klassischer weißer Spargel mit hausgemachter Sauce Hollandaise und Kartoffeln",
-    ingredients: ["1 kg weißer Spargel", "200g Butter", "4 Eigelb", "1 EL Zitronensaft", "Salz, Pfeffer", "500g neue Kartoffeln"],
-    instructions: "Spargel schälen und 12 Min. kochen. Butter klären. Eigelb aufschlagen, Butter einarbeiten. Mit Kartoffeln anrichten.",
-    prep_time: 35, image_url: "/images/rezept-spargel-hollandaise.jpg",
-    tags: ["spargel", "klassisch", "frühling", "festlich"], seasonal: true, category_id: cat_spargel.id
+    title: "Apu's Chicken Tikka Masala",
+    description: "Apus Familienrezept aus Rahgul – cremige Tomaten-Masala-Sauce mit zarter Hähnchenbrust. So kocht man in Springfield Indien.",
+    ingredients: [
+      "600g Hähnchenbrust", "400ml Kokosmilch", "400g gehackte Tomaten",
+      "2 EL Apus Curry-Paste", "1 Zwiebel", "3 Knoblauchzehen",
+      "1 Stück Ingwer (3cm)", "Garam Masala", "Koriander", "Basmatireis"
+    ],
+    instructions: "Hähnchen würfeln und anbraten. Zwiebel, Knoblauch und Ingwer anschwitzen. Curry-Paste einrühren, 2 Min. rösten. Tomaten und Kokosmilch zugeben, 20 Min. köcheln. Mit Garam Masala abschmecken. Mit Reis und frischem Koriander servieren.",
+    prep_time: 45,
+    image_url: "/images/rezept-tikka-masala.jpg",
+    tags: ["indisch", "hähnchen", "apu", "hauptgericht"],
+    seasonal: false,
+    category_id: cat_apu.id
   },
   %{
-    title: "Grüner Spargel mit Parmesan",
-    description: "Knackiger grüner Spargel aus dem Ofen mit Parmesan und Zitrone",
-    ingredients: ["500g grüner Spargel", "50g Parmesan gerieben", "2 EL Olivenöl", "1 Bio-Zitrone", "Meersalz, Pfeffer"],
-    instructions: "Ofen auf 200°C. Spargel in Öl wenden, 15 Min. rösten. Mit Parmesan und Zitronenschale servieren.",
-    prep_time: 20, image_url: "/images/rezept-gruen-spargel.jpg",
-    tags: ["spargel", "vegetarisch", "schnell", "frühling"], seasonal: true, category_id: cat_spargel.id
+    title: "Homer's Donut Bread Pudding",
+    description: "Homer's geniale Erfindung: Was tut man mit übrigen Donuts? Man macht ein Bread Pudding daraus! D'oh – so einfach und so gut.",
+    ingredients: [
+      "6 Springfield-Donuts (vom Vortag)", "3 Eier", "300ml Milch",
+      "100ml Sahne", "50g Zucker", "1 TL Vanilleextrakt",
+      "Prise Zimt", "rosa Zuckerglasur zum Garnieren"
+    ],
+    instructions: "Donuts in Stücke reißen. Eier, Milch, Sahne, Zucker und Vanille verquirlen. Donuts einweichen, 30 Min. ziehen lassen. In gefetteter Form bei 175°C, 35 Min. backen. Warm mit Glasur servieren.",
+    prep_time: 60,
+    image_url: "/images/rezept-donut-pudding.jpg",
+    tags: ["dessert", "backen", "homer", "süß"],
+    seasonal: false,
+    category_id: cat_homer.id
   },
   %{
-    title: "Erdbeer-Rhabarber-Tarte",
-    description: "Fruchtige Frühlingstarte mit frischen Erdbeeren und Rhabarber",
-    ingredients: ["300g Mehl", "150g Butter", "100g Zucker", "300g Erdbeeren", "300g Rhabarber", "2 Eier"],
-    instructions: "Mürbteig herstellen. Rhabarber zuckern. Boden blind backen. Füllung einarbeiten, 30 Min. bei 180°C.",
-    prep_time: 60, image_url: "/images/rezept-erdbeer-tarte.jpg",
-    tags: ["backen", "erdbeeren", "rhabarber", "frühling"], seasonal: true, category_id: cat_dessert.id
+    title: "Squishee Smoothie Bowl",
+    description: "Bart's Geheimtipp: Squishee nicht trinken – als Smoothie Bowl servieren! Schnell, bunt, perfekt für einen Springfield-Morgen.",
+    ingredients: [
+      "1 Squishee Tropical (eingefroren)", "1 Banane", "100g gefrorene Mango",
+      "50ml Kokosmilch", "Toppings: Granola, Kiwi, Erdbeeren, Kokosflocken"
+    ],
+    instructions: "Gefrorenen Squishee, Banane, Mango und Kokosmilch im Mixer cremig pürieren. In Bowl füllen. Mit Granola, Früchten und Kokosflocken garnieren. Sofort servieren!",
+    prep_time: 10,
+    image_url: "/images/rezept-smoothie-bowl.jpg",
+    tags: ["frühstück", "schnell", "vegan", "bunt"],
+    seasonal: true,
+    category_id: cat_schnell.id
   },
   %{
-    title: "Frankfurter Grüne Soße",
-    description: "Traditionelle Frankfurter Spezialität mit hartgekochten Eiern",
-    ingredients: ["1 Bund Grüne Soße Kräuter", "200g Schmand", "200g Joghurt", "4 Eier", "1 EL Senf"],
-    instructions: "Kräuter hacken, mit Schmand und Joghurt verrühren. Würzen. Mit Eiern und Kartoffeln servieren.",
-    prep_time: 25, image_url: "/images/rezept-gruene-sosse.jpg",
-    tags: ["hessen", "regional", "vegetarisch"], seasonal: false, category_id: cat_fruehling.id
+    title: "Bart's Scharfe Salsa mit Tortilla",
+    description: "Ay caramba! Diese Salsa ist so scharf, dass selbst Chief Wiggum um Gnade bittet. Einfach zubereitet, unfassbar lecker.",
+    ingredients: [
+      "4 reife Tomaten", "1 rote Zwiebel", "2 Jalapeños",
+      "1 Bund Koriander", "2 Limetten (Saft)", "1 Knoblauchzehe",
+      "Salz", "Tortilla-Chips zum Servieren"
+    ],
+    instructions: "Tomaten, Zwiebel und Jalapeños fein würfeln. Knoblauch pressen. Koriander hacken. Alles vermengen, mit Limettensaft und Salz abschmecken. 30 Min. ziehen lassen. Mit Tortilla-Chips servieren.",
+    prep_time: 15,
+    image_url: "/images/rezept-salsa.jpg",
+    tags: ["snack", "scharf", "vegan", "schnell"],
+    seasonal: false,
+    category_id: cat_schnell.id
   },
   %{
-    title: "Frühlings-Blattsalat mit Radieschen",
-    description: "Leichter Salat mit Babyspinat, Radieschen und Honig-Senf-Dressing",
-    ingredients: ["150g Babyspinat", "1 Bund Radieschen", "100g Frühlingszwiebeln", "50g Walnüsse", "Olivenöl", "Weißweinessig", "Honig"],
-    instructions: "Spinat waschen. Radieschen in Scheiben. Dressing anrühren. Alles vermischen. Walnüsse rösten.",
-    prep_time: 15, image_url: "/images/rezept-fruehlingsalat.jpg",
-    tags: ["salat", "vegetarisch", "schnell", "frühling"], seasonal: true, category_id: cat_salat.id
+    title: "Marge's Sonntagslasagne",
+    description: "Die Lasagne, die Homer wieder nach Hause bringt. Marges berühmtes Familienrezept – in Springfield ein Heiligtum.",
+    ingredients: [
+      "500g Hackfleisch (gemischt)", "400g Lasagneblätter", "800g Tomatensauce",
+      "500g Ricotta", "200g Mozzarella", "100g Parmesan gerieben",
+      "1 Zwiebel", "3 Knoblauchzehen", "Oregano", "Basilikum"
+    ],
+    instructions: "Hackfleisch mit Zwiebel und Knoblauch anbraten. Tomatensauce zugeben, 15 Min. köcheln. Ricotta mit Kräutern mischen. Lasagne schichten: Sauce – Nudeln – Ricotta – Mozzarella. Wiederholen. Mit Parmesan abschließen. Bei 180°C, 45 Min. backen.",
+    prep_time: 90,
+    image_url: "/images/rezept-lasagne.jpg",
+    tags: ["hauptgericht", "pasta", "marge", "familienrezept"],
+    seasonal: false,
+    category_id: cat_homer.id
   },
   %{
-    title: "Spargel-Risotto mit Zitrone",
-    description: "Cremiges Risotto mit weißem Spargel und frischer Zitrone",
-    ingredients: ["500g weißer Spargel", "250g Risottoreis", "100ml Weißwein", "1l Gemüsebrühe", "50g Parmesan", "30g Butter"],
-    instructions: "Spargel schälen. Zwiebel anschwitzen. Reis mit Wein ablöschen. Brühe angießen. Spargel zugeben. Mit Butter vollenden.",
-    prep_time: 40, image_url: "/images/rezept-spargel-risotto.jpg",
-    tags: ["spargel", "vegetarisch", "risotto"], seasonal: true, category_id: cat_spargel.id
+    title: "Lisa's Veganer Springfield Burger",
+    description: "Lisa beweist: Veganer Essen kann auch in Springfield lecker sein! Ihr Burger ist so gut, dass Homer ihn nicht bemerkt hat.",
+    ingredients: [
+      "2 Dosen Kichererbsen (abgetropft)", "1 rote Zwiebel", "2 Knoblauchzehen",
+      "50g Haferflocken", "2 EL Tomatenmark", "1 TL Kreuzkümmel",
+      "Paprikapulver", "Burgerbrötchen", "Salat, Tomate, Avocado"
+    ],
+    instructions: "Kichererbsen grob zerdrücken. Zwiebel und Knoblauch fein hacken, anschwitzen. Mit Erbsen, Haferflocken und Gewürzen zu einer Masse formen. Patties formen, 4 Min. pro Seite braten. Im Brötchen mit Beilagen servieren.",
+    prep_time: 30,
+    image_url: "/images/rezept-vegan-burger.jpg",
+    tags: ["vegan", "vegetarisch", "burger", "lisa"],
+    seasonal: false,
+    category_id: cat_veg.id
   },
   %{
-    title: "Hähnchen-Pfanne mit Frühlingszwiebeln",
-    description: "Saftige Hähnchenbrust mit Frühlingszwiebeln und frischen Kräutern",
-    ingredients: ["600g Hähnchenbrust", "2 Bund Frühlingszwiebeln", "3 Knoblauchzehen", "200ml Brühe", "Frische Kräuter"],
-    instructions: "Hähnchen anbraten. Knoblauch und Zwiebeln zugeben. Mit Brühe ablöschen. 10 Min. köcheln. Kräuter unterheben.",
-    prep_time: 25, image_url: "/images/rezept-haehnchen-pfanne.jpg",
-    tags: ["haehnchen", "schnell", "frühling"], seasonal: false, category_id: cat_fruehling.id
+    title: "Apu's Mango Lassi",
+    description: "Das perfekte Kühlgetränk nach einer langen Schicht im Kwik-E-Mart. Apus Schwester hat dieses Rezept aus Bombay mitgebracht.",
+    ingredients: [
+      "2 reife Mangos", "400ml Joghurt (3,5% Fett)", "200ml Milch",
+      "2 EL Zucker", "Prise Kardamom", "Eiswürfel", "Minze zum Garnieren"
+    ],
+    instructions: "Mango schälen und würfeln. Mit Joghurt, Milch, Zucker und Kardamom im Mixer cremig pürieren. Mit Eiswürfeln in hohe Gläser füllen. Mit Minze garnieren. Sofort servieren.",
+    prep_time: 10,
+    image_url: "/images/rezept-mango-lassi.jpg",
+    tags: ["getränk", "indisch", "erfrischend", "schnell"],
+    seasonal: true,
+    category_id: cat_schnell.id
   },
   %{
-    title: "Rhabarber-Kompott mit Vanille",
-    description: "Einfaches Kompott, perfekt zu Vanilleeis oder Quark",
-    ingredients: ["500g Rhabarber", "100g Zucker", "1 Vanilleschote", "50ml Wasser"],
-    instructions: "Rhabarber schälen, mit Zucker aufkochen. 10 Min. köcheln. Abkühlen lassen.",
-    prep_time: 20, image_url: "/images/rezept-rhabarber-kompott.jpg",
-    tags: ["rhabarber", "dessert", "frühling", "einfach"], seasonal: true, category_id: cat_dessert.id
-  },
-  %{
-    title: "Pasta mit grünem Spargel und Garnelen",
-    description: "Frische Tagliatelle mit grünem Spargel und Zitronenbutter",
-    ingredients: ["500g frische Tagliatelle", "400g grüner Spargel", "300g Garnelen", "50g Butter", "1 Zitrone", "Weißwein"],
-    instructions: "Pasta kochen. Spargel anbraten. Garnelen zugeben. Mit Weißwein ablöschen. Butter einrühren. Mit Pasta mischen.",
-    prep_time: 30, image_url: "/images/rezept-pasta-spargel.jpg",
-    tags: ["spargel", "pasta", "meeresfrüchte"], seasonal: true, category_id: cat_spargel.id
-  },
-  %{
-    title: "Schwäbische Maultaschen-Pfanne",
-    description: "Gebratene Maultaschen mit karamellisierten Zwiebeln",
-    ingredients: ["400g Maultaschen", "2 Zwiebeln", "3 Eier", "100ml Brühe", "Schnittlauch"],
-    instructions: "Zwiebeln karamellisieren. Maultaschen in Scheiben anbraten. Eier drüber. Mit Brühe ablöschen.",
-    prep_time: 20, image_url: "/images/rezept-maultaschen.jpg",
-    tags: ["schwaben", "regional", "traditionell"], seasonal: false, category_id: cat_fruehling.id
+    title: "Homer's Chili con Carne",
+    description: "Das Chili, das Homer bei der Springfield Chili-Kocherei einreicht. Vorsicht: enthält geheime Zutaten aus der Kwik-E-Mart-Pfefferabteilung.",
+    ingredients: [
+      "500g Rinderhackfleisch", "2 Dosen Kidneybohnen", "800g Tomaten",
+      "2 Chipotle-Schoten", "2 Zwiebeln", "4 Knoblauchzehen",
+      "2 EL Kreuzkümmel", "Chili-Pulver", "Dunkle Schokolade (1 Riegel)",
+      "Saure Sahne, Cheddar zum Servieren"
+    ],
+    instructions: "Hackfleisch scharf anbraten. Zwiebeln und Knoblauch zugeben. Chipotle, Gewürze und Tomaten einrühren. Bohnen zugeben. 1 Std. auf kleiner Flamme köcheln. Schokolade einrühren. Mit Saurer Sahne und Cheddar servieren.",
+    prep_time: 75,
+    image_url: "/images/rezept-chili.jpg",
+    tags: ["hauptgericht", "scharf", "homer", "chili"],
+    seasonal: false,
+    category_id: cat_homer.id
   }
 ]
 
@@ -161,4 +360,10 @@ Enum.each(recipes_data, fn attrs ->
   %Recipe{} |> Recipe.changeset(attrs) |> Repo.insert!()
 end)
 
-IO.puts("✅ Seeds erfolgreich: 5 Märkte, #{length(offers_data)} Angebote, #{length(recipes_data)} Rezepte")
+IO.puts("""
+✅ Seeds erfolgreich!
+   #{length(markets)} Kwik-E-Mart Filialen
+   #{length(offer_categories) + length(recipe_categories)} Kategorien
+   #{length(offers_data)} Angebote
+   #{length(recipes_data)} Rezepte
+""")

@@ -25,6 +25,18 @@ defmodule KwikEMart.Offers do
   defp filter_by_category(query, nil), do: query
   defp filter_by_category(query, id), do: where(query, [o], o.category_id == ^id)
 
+  def list_featured_offers(limit \\ 6) do
+    today = Date.utc_today()
+
+    from(o in Offer,
+      where: o.valid_from <= ^today and o.valid_to >= ^today and o.discount_percent >= 25,
+      preload: [:category, :market],
+      order_by: [desc: o.discount_percent],
+      limit: ^limit
+    )
+    |> Repo.all()
+  end
+
   def get_offer!(id), do: Repo.get!(Offer, id) |> Repo.preload([:market, :category])
 
   def create_offer(attrs) do
