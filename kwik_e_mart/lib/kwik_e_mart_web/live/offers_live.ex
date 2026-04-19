@@ -20,6 +20,7 @@ defmodule KwikEMartWeb.OffersLive do
      |> assign(:selected_category, nil)
      |> assign(:superknueller_only, false)
      |> assign(:nav_active, :angebote)
+     |> assign(:today, Date.utc_today())
      |> assign(:page_title, "Wochenangebote – Kwik-E-Mart")}
   end
 
@@ -157,6 +158,11 @@ defmodule KwikEMartWeb.OffersLive do
                   <img src={offer.image_url} alt={offer.title} class="w-full h-full object-contain p-4" />
                 <% else %>
                   <span class="text-5xl">🛒</span>
+                <% end %>
+                <%= if Date.diff(offer.valid_to, @today) <= 3 do %>
+                  <div class="offer-countdown-badge">
+                    Noch <%= Date.diff(offer.valid_to, @today) %> Tag<%= if Date.diff(offer.valid_to, @today) != 1, do: "e" %>
+                  </div>
                 <% end %>
               </div>
               <div class="offer-card-body">

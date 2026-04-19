@@ -16,7 +16,8 @@
   html { scroll-behavior: smooth; }
 
   body {
-    @apply font-sans text-gray-900 bg-white antialiased;
+    @apply text-gray-900 bg-white antialiased;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
   }
 
   h1, h2, h3, h4, h5, h6 { @apply font-bold; }
@@ -332,6 +333,22 @@
   /* ----- OFFER GRID ----- */
   .offer-grid  { @apply grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4; }
   .recipe-grid { @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6; }
+
+  /* ----- OFFER COUNTDOWN BADGE ----- */
+  .offer-countdown-badge {
+    @apply absolute bottom-0 left-0 right-0 bg-kem-red/90 text-white text-xs font-bold
+           text-center py-1 backdrop-blur-sm;
+  }
+
+  /* ----- APP PROMO BANNER ----- */
+  .kem-app-banner {
+    background: linear-gradient(135deg, #1a1a1a 0%, #003320 100%);
+  }
+
+  /* ----- NEWSLETTER SECTION ----- */
+  .kem-newsletter-section {
+    @apply bg-gray-50 py-14 border-t border-gray-100;
+  }
 }
 
 /* =========================================================

@@ -42,9 +42,11 @@ defmodule KwikEMartWeb.Router do
   scope "/", KwikEMartWeb do
     pipe_through :browser
 
+    live "/", HomeLive, :index
     live "/markt-waehlen", MarketFinderLive, :index
     live "/angebote/live", OffersLive, :index
     live "/rezepte/live", RecipesLive, :index
+    live "/rezepte/live/:id", RecipeDetailLive, :show
   end
 
   if Application.compile_env(:kwik_e_mart, :dev_routes) do

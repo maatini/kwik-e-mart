@@ -40,7 +40,7 @@ defmodule KwikEMartWeb.RecipeTeaserComponent do
             <span class="recipe-card-tag">#<%= tag %></span>
           <% end %>
         </div>
-        <.link navigate={~p"/rezepte/live"} class="recipe-card-mehr">Mehr erfahren →</.link>
+        <.link navigate={~p"/rezepte/live/#{@recipe.id}"} class="recipe-card-mehr">Mehr erfahren →</.link>
       </div>
     </div>
     """

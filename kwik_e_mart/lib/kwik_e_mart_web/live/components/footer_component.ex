@@ -39,7 +39,12 @@ defmodule KwikEMartWeb.FooterComponent do
         </div>
         <div class="border-t border-gray-700 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p class="text-gray-500 text-xs">© 2026 Kwik-E-Mart, Springfield</p>
-          <p class="text-gray-600 text-xs">Fan-Projekt – inspiriert von edeka.de · Powered by Phoenix + Beacon CMS</p>
+          <div class="flex items-center gap-4">
+            <a href="#" title="Facebook" class="text-gray-500 hover:text-kem-yellow transition-colors text-lg">Facebook</a>
+            <a href="#" title="Instagram" class="text-gray-500 hover:text-kem-yellow transition-colors text-lg">Instagram</a>
+            <a href="#" title="YouTube" class="text-gray-500 hover:text-kem-yellow transition-colors text-lg">YouTube</a>
+          </div>
+          <p class="text-gray-600 text-xs">Fan-Projekt · Powered by Phoenix + Beacon CMS</p>
         </div>
       </div>
     </footer>

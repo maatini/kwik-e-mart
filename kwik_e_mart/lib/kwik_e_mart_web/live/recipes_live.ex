@@ -141,6 +141,9 @@ defmodule KwikEMartWeb.RecipesLive do
                     <% end %>
                   </div>
                 <% end %>
+                <.link navigate={~p"/rezepte/live/#{recipe.id}"} class="recipe-card-mehr">
+                  Zum Rezept →
+                </.link>
               </div>
             </div>
           <% end %>

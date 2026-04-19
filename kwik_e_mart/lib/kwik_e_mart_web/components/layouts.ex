@@ -11,6 +11,7 @@ defmodule KwikEMartWeb.Layouts do
   use KwikEMartWeb, :html
 
   import KwikEMartWeb.HeaderComponent
+  import KwikEMartWeb.FooterComponent
 
   embed_templates "layouts/*"
 end
