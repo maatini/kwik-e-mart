@@ -10,5 +10,7 @@ defmodule KwikEMartWeb.Layouts do
   """
   use KwikEMartWeb, :html
 
+  import KwikEMartWeb.HeaderComponent
+
   embed_templates "layouts/*"
 end
