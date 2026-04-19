@@ -90,6 +90,12 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+# Wochenangebote jeden Sonntag um 03:00 Uhr automatisch importieren
+config :kwik_e_mart, KwikEMart.Scheduler,
+  jobs: [
+    {"0 3 * * 0", {KwikEMart.Offers, :import_weekly_offers, []}}
+  ]
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"

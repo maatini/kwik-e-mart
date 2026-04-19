@@ -32,6 +32,7 @@ Ein technisches Referenzprojekt für einen modernen Supermarkt-Webshop im Simpso
 - [Konfiguration](#konfiguration)
 - [Tests](#tests)
 - [Deployment](#deployment)
+- [Automatischer Wochenangebots-Import](#automatischer-wochenangebots-import)
 - [Lizenz & Disclaimer](#lizenz--disclaimer)
 
 ---
@@ -421,6 +422,51 @@ fly secrets set SECRET_KEY_BASE=$(mix phx.gen.secret)
 fly secrets set DATABASE_URL=<connection-string>
 fly secrets set ADMIN_PASSWORD=<sicheres-passwort>
 fly deploy
+
+---
+
+## Automatischer Wochenangebots-Import
+
+Jeden **Sonntag um 03:00 Uhr** importiert Kwik-E-Mart automatisch neue Wochenangebote aus einer CSV-Datei. Betrieben von `quantum` — kein Overkill, kein Oban.
+
+### CSV-Datei platzieren
+
+```
+kwik_e_mart/priv/import/current_week.csv
+```
+
+Format (mit Header-Zeile):
+
+```
+title,description,price,original_price,discount_percent,category_slug,featured,image_url
+Duff Beer 6er-Pack,"Homer's Lieblingsgetränk",3.99,5.49,27,getraenke,true,/images/duff-beer.svg
+```
+
+- `valid_from` / `valid_to` werden automatisch gesetzt (heute + 6 Tage)
+- `category_slug` wird gegen bestehende Kategorien aufgelöst — unbekannte Slugs → kein Fehler, nur Warning
+- Alte Angebote werden nicht gelöscht — der Datums-Filter erledigt das automatisch
+
+### Manuell auslösen
+
+```bash
+# Mit Standard-Pfad (priv/import/current_week.csv)
+mix kwik_e_mart.import_offers
+
+# Mit eigenem Pfad
+mix kwik_e_mart.import_offers /pfad/zur/datei.csv
+```
+
+### Cron-Zeitplan ändern
+
+In `config/config.exs`:
+
+```elixir
+config :kwik_e_mart, KwikEMart.Scheduler,
+  jobs: [
+    {"0 3 * * 0", {KwikEMart.Offers, :import_weekly_offers, []}}
+  #   └─────────── Sonntag 03:00 — Standard Kwik-E-Mart Nachtschicht
+  ]
+```
 
 ---
 

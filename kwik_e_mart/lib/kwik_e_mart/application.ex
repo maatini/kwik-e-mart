@@ -20,7 +20,8 @@ defmodule KwikEMart.Application do
       # {KwikEMart.Worker, arg},
       # Start to serve requests, typically the last entry
       KwikEMartWeb.Endpoint,
-      KwikEMartWeb.ProxyEndpoint
+      KwikEMartWeb.ProxyEndpoint,
+      KwikEMart.Scheduler
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
