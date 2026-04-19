@@ -63,7 +63,8 @@ defmodule KwikEMart.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
       {:nimble_csv, "~> 1.3"},
-      {:quantum, "~> 3.5"}
+      {:quantum, "~> 3.5"},
+      {:cachex, "~> 3.6"}
     ]
   end
 

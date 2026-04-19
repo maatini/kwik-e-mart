@@ -9,6 +9,7 @@ defmodule KwikEMart.Application do
   def start(_type, _args) do
     children = [
       KwikEMartWeb.Telemetry,
+      {Cachex, name: :kwik_cache},
       KwikEMart.Repo,
       {DNSCluster, query: Application.get_env(:kwik_e_mart, :dns_cluster_query) || :ignore},
       {Beacon, [sites: [Application.fetch_env!(:beacon, :kwik)]]},

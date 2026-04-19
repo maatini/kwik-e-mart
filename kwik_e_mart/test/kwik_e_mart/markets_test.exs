@@ -83,4 +83,75 @@ defmodule KwikEMart.MarketsTest do
       assert_raise Ecto.NoResultsError, fn -> Markets.get_market!(market.id) end
     end
   end
+
+  describe "get_market/1" do
+    test "gibt Markt bei gültiger ID zurück" do
+      {:ok, market} = Markets.create_market(@valid_attrs)
+      assert %Market{} = Markets.get_market(market.id)
+    end
+
+    test "gibt nil bei ungültiger ID zurück" do
+      assert is_nil(Markets.get_market(0))
+    end
+  end
+
+  describe "list_markets_by_city/1" do
+    test "findet Märkte in der Stadt" do
+      {:ok, _} = Markets.create_market(@valid_attrs)
+      results = Markets.list_markets_by_city("Hamburg")
+      assert length(results) >= 1
+      assert Enum.all?(results, fn m -> String.contains?(m.city, "Hamburg") end)
+    end
+
+    test "case-insensitive Suche" do
+      {:ok, _} = Markets.create_market(@valid_attrs)
+      assert length(Markets.list_markets_by_city("hamburg")) >= 1
+    end
+  end
+
+  describe "list_markets_by_zip/1" do
+    test "findet Märkte mit exakter PLZ" do
+      {:ok, market} = Markets.create_market(@valid_attrs)
+      results = Markets.list_markets_by_zip(market.zip)
+      assert Enum.any?(results, fn m -> m.id == market.id end)
+    end
+
+    test "gibt leere Liste bei unbekannter PLZ zurück" do
+      assert [] = Markets.list_markets_by_zip("00000")
+    end
+  end
+
+  describe "list_markets_by_region/1" do
+    test "findet Märkte in der Region" do
+      {:ok, _} = Markets.create_market(@valid_attrs)
+      results = Markets.list_markets_by_region("Hamburg")
+      assert length(results) >= 1
+      assert Enum.all?(results, fn m -> m.region == "Hamburg" end)
+    end
+  end
+
+  describe "find_nearby_markets/3" do
+    test "findet Märkte innerhalb des Radius" do
+      # Koordinaten direkt auf dem Testmarkt (Hamburg Innenstadt)
+      {:ok, _} = Markets.create_market(@valid_attrs)
+      results = Markets.find_nearby_markets(53.5503, 10.0006, 1)
+      assert length(results) >= 1
+    end
+
+    test "gibt keine Märkte außerhalb des Radius zurück" do
+      {:ok, _} = Markets.create_market(@valid_attrs)
+      # München liegt ~600 km von Hamburg entfernt
+      results = Markets.find_nearby_markets(48.1351, 11.5820, 10)
+      assert Enum.all?(results, fn m ->
+        m.latitude != 53.5503 or m.longitude != 10.0006
+      end)
+    end
+
+    test "ignoriert Märkte ohne Koordinaten" do
+      {:ok, _} = Markets.create_market(Map.merge(@valid_attrs, %{latitude: nil, longitude: nil}))
+      # Kein Crash erwartet, Markt ohne Koordinaten wird nicht zurückgegeben
+      results = Markets.find_nearby_markets(53.5503, 10.0006, 100)
+      assert Enum.all?(results, fn m -> not is_nil(m.latitude) end)
+    end
+  end
 end

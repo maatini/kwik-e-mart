@@ -35,6 +35,16 @@ defmodule KwikEMart.OffersTest do
   end
 
   describe "list_offers/1" do
+    test "filtert nach superknueller (discount >= 30%)", %{market: market} do
+      {:ok, _big} =
+        Offers.create_offer(Map.put(offer_attrs(market.id), :discount_percent, 35))
+      {:ok, _small} =
+        Offers.create_offer(Map.put(offer_attrs(market.id), :discount_percent, 15))
+
+      results = Offers.list_offers(superknueller: true)
+      assert Enum.all?(results, fn o -> o.discount_percent >= 30 end)
+    end
+
     test "gibt nur aktuell gültige Angebote zurück", %{market: market, today: today} do
       {:ok, _current} = Offers.create_offer(offer_attrs(market.id))
 
@@ -92,6 +102,61 @@ defmodule KwikEMart.OffersTest do
     test "gibt Fehler bei fehlendem Markt" do
       attrs = offer_attrs(0)
       assert {:error, _changeset} = Offers.create_offer(attrs)
+    end
+  end
+
+  describe "get_offer!/1" do
+    test "gibt Angebot mit Preloads zurück", %{market: market} do
+      {:ok, offer} = Offers.create_offer(offer_attrs(market.id))
+      fetched = Offers.get_offer!(offer.id)
+      assert fetched.id == offer.id
+      assert %KwikEMart.Markets.Market{} = fetched.market
+    end
+
+    test "wirft Fehler bei ungültiger ID" do
+      assert_raise Ecto.NoResultsError, fn -> Offers.get_offer!(0) end
+    end
+  end
+
+  describe "list_featured_offers/1" do
+    test "gibt nur Angebote mit >= 25% Rabatt zurück", %{market: market} do
+      {:ok, _featured} =
+        Offers.create_offer(Map.put(offer_attrs(market.id), :discount_percent, 30))
+      {:ok, _normal} =
+        Offers.create_offer(Map.put(offer_attrs(market.id), :discount_percent, 10))
+
+      results = Offers.list_featured_offers()
+      assert Enum.all?(results, fn o -> o.discount_percent >= 25 end)
+    end
+
+    test "begrenzt Ergebnisse auf limit", %{market: market} do
+      for _ <- 1..5 do
+        Offers.create_offer(Map.put(offer_attrs(market.id), :discount_percent, 50))
+      end
+
+      assert length(Offers.list_featured_offers(3)) <= 3
+    end
+  end
+
+  describe "update_offer/2" do
+    test "aktualisiert Angebot mit gültigen Attributen", %{market: market} do
+      {:ok, offer} = Offers.create_offer(offer_attrs(market.id))
+      assert {:ok, updated} = Offers.update_offer(offer, %{title: "Aktualisiert"})
+      assert updated.title == "Aktualisiert"
+    end
+
+    test "gibt Fehler bei ungültigem Preis zurück", %{market: market} do
+      {:ok, offer} = Offers.create_offer(offer_attrs(market.id))
+      assert {:error, changeset} = Offers.update_offer(offer, %{price: "-5.00"})
+      assert %{price: [_]} = errors_on(changeset)
+    end
+  end
+
+  describe "delete_offer/1" do
+    test "löscht Angebot", %{market: market} do
+      {:ok, offer} = Offers.create_offer(offer_attrs(market.id))
+      assert {:ok, _} = Offers.delete_offer(offer)
+      assert_raise Ecto.NoResultsError, fn -> Offers.get_offer!(offer.id) end
     end
   end
 

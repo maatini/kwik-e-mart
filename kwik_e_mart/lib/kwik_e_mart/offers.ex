@@ -2,7 +2,7 @@ defmodule KwikEMart.Offers do
   import Ecto.Query
   require Logger
 
-  alias KwikEMart.Repo
+  alias KwikEMart.{Repo, Cache}
   alias KwikEMart.Offers.{Offer, Category}
 
   NimbleCSV.define(KwikEMart.Offers.CSV, separator: ",", escape: "\"")
@@ -12,6 +12,10 @@ defmodule KwikEMart.Offers do
   # ---------------------------------------------------------------------------
 
   def list_offers(opts \\ []) do
+    Cache.fetch_offers(opts, fn -> do_list_offers(opts) end)
+  end
+
+  defp do_list_offers(opts) do
     market_id = Keyword.get(opts, :market_id)
     category_id = Keyword.get(opts, :category_id)
     superknueller = Keyword.get(opts, :superknueller, false)
@@ -38,32 +42,38 @@ defmodule KwikEMart.Offers do
   defp filter_by_superknueller(query, true), do: where(query, [o], o.discount_percent >= 30)
 
   def list_featured_offers(limit \\ 6) do
-    today = Date.utc_today()
+    Cache.fetch_featured_offers(limit, fn ->
+      today = Date.utc_today()
 
-    from(o in Offer,
-      where: o.valid_from <= ^today and o.valid_to >= ^today and o.discount_percent >= 25,
-      preload: [:category, :market],
-      order_by: [desc: o.discount_percent],
-      limit: ^limit
-    )
-    |> Repo.all()
+      from(o in Offer,
+        where: o.valid_from <= ^today and o.valid_to >= ^today and o.discount_percent >= 25,
+        preload: [:category, :market],
+        order_by: [desc: o.discount_percent],
+        limit: ^limit
+      )
+      |> Repo.all()
+    end)
   end
 
   def get_offer!(id), do: Repo.get!(Offer, id) |> Repo.preload([:market, :category])
 
   def create_offer(attrs) do
-    %Offer{}
-    |> Offer.changeset(attrs)
-    |> Repo.insert()
+    result = %Offer{} |> Offer.changeset(attrs) |> Repo.insert()
+    if match?({:ok, _}, result), do: Cache.invalidate_offers()
+    result
   end
 
   def update_offer(%Offer{} = offer, attrs) do
-    offer
-    |> Offer.changeset(attrs)
-    |> Repo.update()
+    result = offer |> Offer.changeset(attrs) |> Repo.update()
+    if match?({:ok, _}, result), do: Cache.invalidate_offers()
+    result
   end
 
-  def delete_offer(%Offer{} = offer), do: Repo.delete(offer)
+  def delete_offer(%Offer{} = offer) do
+    result = Repo.delete(offer)
+    if match?({:ok, _}, result), do: Cache.invalidate_offers()
+    result
+  end
 
   # ---------------------------------------------------------------------------
   # Weekly CSV Import
@@ -151,6 +161,7 @@ defmodule KwikEMart.Offers do
       end)
 
     count = Enum.count(results, &(&1 == :ok))
+    Cache.invalidate_offers()
     {:ok, count}
   end
 
@@ -185,7 +196,9 @@ defmodule KwikEMart.Offers do
   # ---------------------------------------------------------------------------
 
   def list_categories(type \\ "offer") do
-    Repo.all(from c in Category, where: c.type == ^type, order_by: c.name)
+    Cache.fetch_categories(type, fn ->
+      Repo.all(from c in Category, where: c.type == ^type, order_by: c.name)
+    end)
   end
 
   def get_category!(id), do: Repo.get!(Category, id)

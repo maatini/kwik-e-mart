@@ -38,6 +38,9 @@ config :swoosh, :api_client, false
 # Enable Phoenix.Ecto.SQL.Sandbox plug for LiveView tests
 config :kwik_e_mart, sql_sandbox: true
 
+# Cache deaktivieren – verhindert stale-Data zwischen Tests
+config :kwik_e_mart, :cache_enabled, false
+
 # Print only warnings and errors during test
 config :logger, level: :warning
 

@@ -31,8 +31,21 @@ services:
       PHX_HOST: ${PHX_HOST:?PHX_HOST required}
       PORT: 4000
       SECRET_KEY_BASE: ${SECRET_KEY_BASE:?SECRET_KEY_BASE required}
+      ADMIN_USERNAME: ${ADMIN_USERNAME:?ADMIN_USERNAME required}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:?ADMIN_PASSWORD required}
       MIX_ENV: prod
-    command: ["/app/bin/kwik_e_mart", "start"]
+    # Migrations vor dem Start ausführen
+    command: >
+      /bin/sh -c "
+        /app/bin/kwik_e_mart eval 'KwikEMart.Release.migrate()' &&
+        /app/bin/kwik_e_mart start
+      "
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:4000/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
 
 volumes:
   postgres_data:

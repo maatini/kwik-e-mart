@@ -98,4 +98,35 @@ defmodule KwikEMart.RecipesTest do
       assert_raise Ecto.NoResultsError, fn -> Recipes.get_recipe!(recipe.id) end
     end
   end
+
+  describe "get_recipe!/1" do
+    test "gibt Rezept mit Kategorie zurück", %{category: cat} do
+      {:ok, recipe} = Recipes.create_recipe(Map.put(recipe_attrs(), :category_id, cat.id))
+      fetched = Recipes.get_recipe!(recipe.id)
+      assert fetched.id == recipe.id
+      assert fetched.category.id == cat.id
+    end
+
+    test "wirft Fehler bei ungültiger ID" do
+      assert_raise Ecto.NoResultsError, fn -> Recipes.get_recipe!(0) end
+    end
+  end
+
+  describe "list_all_tags/0" do
+    test "gibt alle eindeutigen Tags zurück" do
+      {:ok, _} = Recipes.create_recipe(recipe_attrs(tags: ["spargel", "frühling"]))
+      {:ok, _} = Recipes.create_recipe(recipe_attrs(title: "Anderes", tags: ["sommer", "spargel"]))
+
+      tags = Recipes.list_all_tags()
+      assert "spargel" in tags
+      assert "frühling" in tags
+      assert "sommer" in tags
+      # Kein Duplikat von spargel
+      assert Enum.count(tags, &(&1 == "spargel")) == 1
+    end
+
+    test "gibt leere Liste zurück wenn keine Rezepte existieren" do
+      assert [] = Recipes.list_all_tags()
+    end
+  end
 end

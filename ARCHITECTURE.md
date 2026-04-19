@@ -42,6 +42,7 @@ Kwik-E-Mart is a technical reference project demonstrating a production-grade El
 | CSS | Tailwind CSS 3 |
 | HTTP server | Bandit |
 | Scheduler | Quantum 3.5 |
+| Cache | Cachex 3.6 (ETS-backed, In-Process) |
 | CSV parsing | NimbleCSV 1.3 |
 | Dev environment | Devbox (Nix) + Docker |
 
@@ -293,8 +294,8 @@ The multi-stage Dockerfile builds assets in the `build` stage (Node.js + mix) an
 |----------|-----------------|---------|
 | `DATABASE_URL` | ✅ | PostgreSQL connection string |
 | `SECRET_KEY_BASE` | ✅ | Phoenix session signing (min. 64 chars) |
-| `ADMIN_USERNAME` | ✅ | Beacon LiveAdmin basic auth |
-| `ADMIN_PASSWORD` | ✅ | Beacon LiveAdmin basic auth |
+| `ADMIN_USERNAME` | ✅ | Beacon LiveAdmin Basic Auth (Pflichtfeld in docker-compose.prod.yml) |
+| `ADMIN_PASSWORD` | ✅ | Beacon LiveAdmin Basic Auth (Pflichtfeld in docker-compose.prod.yml) |
 | `PHX_HOST` | ✅ | Public hostname for URL generation |
 | `PORT` | optional | HTTP port, default 4000 |
 
@@ -303,6 +304,7 @@ The multi-stage Dockerfile builds assets in the `build` stage (Node.js + mix) an
 ```
 KwikEMart.Supervisor (one_for_one)
 ├── KwikEMartWeb.Telemetry
+├── Cachex (:kwik_cache)           (ETS-backed, In-Process)
 ├── KwikEMart.Repo
 ├── DNSCluster
 ├── Beacon (site: :kwik)
@@ -315,6 +317,22 @@ KwikEMart.Supervisor (one_for_one)
 ```
 
 `KwikEndpoint` starts before `ProxyEndpoint` so Beacon is fully booted before the first public request arrives.
+
+---
+
+## Caching Strategy
+
+`KwikEMart.Cache` wraps Cachex (:kwik_cache) with typed fetch helpers:
+
+| Funktion | Cache-Key | TTL | Invalidierung |
+|----------|-----------|-----|---------------|
+| `list_offers/1` | `{:offers, hash(opts)}` | 5 min | `create/update/delete_offer`, `import_weekly_offers` |
+| `list_featured_offers/1` | `{:offers, :featured, limit}` | 5 min | wie oben |
+| `list_recipes/1` | `{:recipes, hash(opts)}` | 5 min | `create/update/delete_recipe` |
+| `list_all_tags/0` | `{:recipes, :tags}` | 5 min | wie oben |
+| `list_categories/1` | `{:categories, type}` | 1 h | — (Categories ändern sich selten) |
+
+Im Test-Env ist der Cache deaktiviert (`config :kwik_e_mart, :cache_enabled, false`), um stale-Data zwischen Tests zu verhindern.
 
 ---
 

@@ -45,7 +45,7 @@
       ],
       "test": [
         "devbox run db:start",
-        "cd $DEVBOX_PROJECT_ROOT/kwik_e_mart && mix test"
+        "cd $DEVBOX_PROJECT_ROOT/kwik_e_mart && MIX_ENV=test mix test"
       ],
       "reset": [
         "devbox run db:start",
