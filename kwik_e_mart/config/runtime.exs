@@ -65,25 +65,43 @@ if config_env() == :prod do
   host = System.get_env("PHX_HOST") || "example.com"
   port = String.to_integer(System.get_env("PORT") || "4000")
 
+  signing_salt =
+    System.get_env("PHX_SIGNING_SALT") ||
+      raise """
+      environment variable PHX_SIGNING_SALT is missing.
+      You can generate one by calling: mix phx.gen.secret 32
+      """
+
   config :kwik_e_mart, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")
 
   config :kwik_e_mart, KwikEMartWeb.Endpoint,
     url: [host: host, port: 8443, scheme: "https"],
     http: [ip: {0, 0, 0, 0, 0, 0, 0, 0}, port: 4100],
-    secret_key_base: secret_key_base
+    secret_key_base: secret_key_base,
+    live_view: [signing_salt: signing_salt]
 
   config :kwik_e_mart, KwikEMartWeb.ProxyEndpoint,
     check_origin: {KwikEMartWeb.ProxyEndpoint, :check_origin, []},
     url: [port: 443, scheme: "https"],
     http: [ip: {0, 0, 0, 0, 0, 0, 0, 0}, port: port],
     secret_key_base: secret_key_base,
+    live_view: [signing_salt: signing_salt],
     server: !!System.get_env("PHX_SERVER")
 
   config :kwik_e_mart, KwikEMartWeb.KwikEndpoint,
     url: [host: host, port: 8551, scheme: "https"],
     http: [ip: {0, 0, 0, 0, 0, 0, 0, 0}, port: 4590],
     secret_key_base: secret_key_base,
+    live_view: [signing_salt: signing_salt],
     server: !!System.get_env("PHX_SERVER")
+
+  config :kwik_e_mart,
+    session_options: [
+      store: :cookie,
+      key: "_kwik_e_mart_key",
+      signing_salt: signing_salt,
+      same_site: "Lax"
+    ]
 
   # ## SSL Support
   #

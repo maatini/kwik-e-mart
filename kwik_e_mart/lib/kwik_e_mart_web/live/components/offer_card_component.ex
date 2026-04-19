@@ -35,18 +35,21 @@ defmodule KwikEMartWeb.OfferCardComponent do
         <p class="text-xs text-gray-400 mt-1">
           gültig bis <%= format_date(@offer.valid_to) %>
         </p>
-        <a href="/angebote/live" class="text-xs font-semibold text-kem-green hover:underline mt-1 inline-block">
+        <.link navigate={~p"/angebote/live"} class="text-xs font-semibold text-kem-green hover:underline mt-1 inline-block">
           Mehr erfahren →
-        </a>
+        </.link>
       </div>
     </div>
     """
   end
 
-  defp format_price(price) when is_nil(price), do: ""
-  defp format_price(price) do
-    decimal = Decimal.to_float(price)
-    :io_lib.format("~.2f €", [decimal]) |> to_string() |> String.replace(".", ",")
+  defp format_price(nil), do: ""
+  defp format_price(%Decimal{} = price) do
+    price
+    |> Decimal.round(2)
+    |> Decimal.to_string(:normal)
+    |> String.replace(".", ",")
+    |> Kernel.<>(" €")
   end
 
   defp format_date(%Date{} = date) do

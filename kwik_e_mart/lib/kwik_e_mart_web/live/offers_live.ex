@@ -15,6 +15,7 @@ defmodule KwikEMartWeb.OffersLive do
      |> assign(:current_market, current_market)
      |> assign(:categories, categories)
      |> assign(:offers, offers)
+     |> assign(:date_range, valid_range(offers))
      |> assign(:selected_category, nil)
      |> assign(:superknueller_only, false)
      |> assign(:nav_active, :angebote)
@@ -25,14 +26,19 @@ defmodule KwikEMartWeb.OffersLive do
   def handle_params(%{"superknueller" => "true"}, _uri, socket) do
     market_id = socket.assigns[:current_market] && socket.assigns.current_market.id
     offers = Offers.list_offers(market_id: market_id, superknueller: true)
-    {:noreply, assign(socket, offers: offers, selected_category: nil, superknueller_only: true)}
+    {:noreply, assign(socket, offers: offers, date_range: valid_range(offers), selected_category: nil, superknueller_only: true)}
   end
 
   def handle_params(%{"category" => cat_id}, _uri, socket) do
-    market_id = socket.assigns[:current_market] && socket.assigns.current_market.id
-    cat_id_int = String.to_integer(cat_id)
-    offers = Offers.list_offers(market_id: market_id, category_id: cat_id_int)
-    {:noreply, assign(socket, offers: offers, selected_category: cat_id_int, superknueller_only: false)}
+    case Integer.parse(cat_id) do
+      {cat_id_int, ""} ->
+        market_id = socket.assigns[:current_market] && socket.assigns.current_market.id
+        offers = Offers.list_offers(market_id: market_id, category_id: cat_id_int)
+        {:noreply, assign(socket, offers: offers, date_range: valid_range(offers), selected_category: cat_id_int, superknueller_only: false)}
+
+      _ ->
+        {:noreply, socket}
+    end
   end
 
   def handle_params(_params, _uri, socket), do: {:noreply, socket}
@@ -48,10 +54,6 @@ defmodule KwikEMartWeb.OffersLive do
 
   def handle_event("reset_filter", _params, socket) do
     {:noreply, push_patch(socket, to: ~p"/angebote/live")}
-  end
-
-  def handle_event("download_pdf", _params, socket) do
-    {:noreply, put_flash(socket, :info, "PDF wird generiert... Thank you, come again!")}
   end
 
   defp format_price(nil), do: ""
@@ -81,16 +83,17 @@ defmodule KwikEMartWeb.OffersLive do
               Alle Angebote in Springfield
             <% end %>
           </h1>
-          <%= if valid_range(@offers) do %>
+          <%= if @date_range do %>
             <p class="text-sm text-gray-500 mt-1">
-              Gültig <%= valid_range(@offers) %> · Nur in teilnehmenden Märkten
+              Gültig <%= @date_range %> · Nur in teilnehmenden Märkten
             </p>
           <% end %>
         </div>
         <div class="flex items-center gap-3">
           <button
-            phx-click="download_pdf"
-            class="hidden sm:flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-kem-green border border-gray-200 rounded-full px-4 py-2 transition-colors"
+            disabled
+            title="Demnächst verfügbar"
+            class="hidden sm:flex items-center gap-2 text-sm font-medium text-gray-300 border border-gray-100 rounded-full px-4 py-2 cursor-not-allowed"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />

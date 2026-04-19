@@ -23,11 +23,13 @@ defmodule KwikEMart.Cache do
   def invalidate_offers, do: invalidate_prefix(:offers)
   def invalidate_recipes, do: invalidate_prefix(:recipes)
 
+  @cache_enabled Application.compile_env(:kwik_e_mart, :cache_enabled, true)
+
   defp fetch(key, ttl, fun) do
-    if Application.get_env(:kwik_e_mart, :cache_enabled, true) do
-      case Cachex.fetch(@cache, key, fn -> {:commit, fun.(), ttl: ttl} end) do
+    if @cache_enabled do
+      case Cachex.fetch(@cache, key, fn -> {:commit, fun.(), [ttl: ttl]} end) do
         {:ok, value} -> value
-        {:commit, value} -> value
+        {:loaded, value} -> value
         _ -> fun.()
       end
     else

@@ -28,15 +28,21 @@ defmodule KwikEMartWeb.MarketFinderLive do
 
   @impl true
   def handle_event("select_market", %{"id" => id}, socket) do
-    market = Markets.get_market!(String.to_integer(id))
+    case Integer.parse(id) do
+      {int, ""} ->
+        market = Markets.get_market!(int)
 
-    {:noreply,
-     socket
-     |> assign(:current_market, market)
-     |> assign(:results, [])
-     |> assign(:query, "")
-     |> put_flash(:info, "#{market.name} in #{market.city} ausgewählt")
-     |> push_event("market_selected", %{market_id: market.id})}
+        {:noreply,
+         socket
+         |> assign(:current_market, market)
+         |> assign(:results, [])
+         |> assign(:query, "")
+         |> put_flash(:info, "#{market.name} in #{market.city} ausgewählt")
+         |> push_event("market_selected", %{market_id: market.id})}
+
+      _ ->
+        {:noreply, socket}
+    end
   end
 
   @impl true

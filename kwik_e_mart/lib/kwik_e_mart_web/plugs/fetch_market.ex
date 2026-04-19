@@ -8,7 +8,11 @@ defmodule KwikEMartWeb.Plugs.FetchMarket do
   def call(conn, _opts) do
     case conn.cookies["kem_market_id"] do
       nil -> conn
-      market_id -> put_session(conn, "market_id", String.to_integer(market_id))
+      market_id ->
+        case Integer.parse(market_id) do
+          {id, ""} -> put_session(conn, "market_id", id)
+          _ -> conn
+        end
     end
   end
 end

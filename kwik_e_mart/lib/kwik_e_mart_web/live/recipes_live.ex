@@ -6,12 +6,11 @@ defmodule KwikEMartWeb.RecipesLive do
   @impl true
   def mount(_params, _session, socket) do
     categories = Offers.list_categories("recipe")
-    recipes = Recipes.list_recipes()
 
     {:ok,
      socket
      |> assign(:categories, categories)
-     |> assign(:recipes, recipes)
+     |> assign(:recipes, [])
      |> assign(:selected_category, nil)
      |> assign(:show_seasonal_only, false)
      |> assign(:nav_active, :rezepte)
@@ -19,22 +18,50 @@ defmodule KwikEMartWeb.RecipesLive do
   end
 
   @impl true
+  def handle_params(params, _uri, socket) do
+    {:noreply, apply_filters(socket, params)}
+  end
+
+  @impl true
   def handle_event("filter_category", %{"id" => id}, socket) do
-    cat_id = String.to_integer(id)
-    recipes = Recipes.list_recipes(category_id: cat_id)
-    {:noreply, assign(socket, recipes: recipes, selected_category: cat_id, show_seasonal_only: false)}
+    case Integer.parse(id) do
+      {_int, ""} -> {:noreply, push_patch(socket, to: ~p"/rezepte/live?category=#{id}")}
+      _ -> {:noreply, socket}
+    end
   end
 
   @impl true
   def handle_event("toggle_seasonal", _params, socket) do
-    seasonal = !socket.assigns.show_seasonal_only
-    recipes = if seasonal, do: Recipes.list_seasonal_recipes(), else: Recipes.list_recipes()
-    {:noreply, assign(socket, recipes: recipes, show_seasonal_only: seasonal, selected_category: nil)}
+    if socket.assigns.show_seasonal_only do
+      {:noreply, push_patch(socket, to: ~p"/rezepte/live")}
+    else
+      {:noreply, push_patch(socket, to: ~p"/rezepte/live?seasonal=true")}
+    end
   end
 
   @impl true
   def handle_event("reset_filter", _params, socket) do
-    {:noreply, assign(socket, recipes: Recipes.list_recipes(), selected_category: nil, show_seasonal_only: false)}
+    {:noreply, push_patch(socket, to: ~p"/rezepte/live")}
+  end
+
+  defp apply_filters(socket, %{"category" => cat_id}) do
+    case Integer.parse(cat_id) do
+      {cat_id_int, ""} ->
+        recipes = Recipes.list_recipes(category_id: cat_id_int)
+        assign(socket, recipes: recipes, selected_category: cat_id_int, show_seasonal_only: false)
+
+      _ ->
+        assign(socket, recipes: Recipes.list_recipes(), selected_category: nil, show_seasonal_only: false)
+    end
+  end
+
+  defp apply_filters(socket, %{"seasonal" => "true"}) do
+    recipes = Recipes.list_seasonal_recipes()
+    assign(socket, recipes: recipes, selected_category: nil, show_seasonal_only: true)
+  end
+
+  defp apply_filters(socket, _params) do
+    assign(socket, recipes: Recipes.list_recipes(), selected_category: nil, show_seasonal_only: false)
   end
 
   @impl true
