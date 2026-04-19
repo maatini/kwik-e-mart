@@ -31,7 +31,7 @@
 
   /* ----- NAVIGATION ----- */
   .kem-nav {
-    @apply sticky top-0 z-50 bg-kem-green shadow-md;
+    @apply sticky top-0 z-50 bg-white border-b border-gray-100 shadow-sm;
   }
 
   .kem-nav-inner {
@@ -39,16 +39,30 @@
   }
 
   .kem-nav-logo {
-    @apply text-2xl font-black text-white tracking-tight hover:opacity-90 transition-opacity;
+    @apply text-2xl font-black tracking-tight hover:opacity-80 transition-opacity;
+    color: var(--kem-green);
   }
 
   .kem-nav-link {
-    @apply text-white/90 hover:text-kem-yellow font-medium text-sm transition-colors duration-150 whitespace-nowrap;
+    @apply text-gray-700 hover:text-kem-green font-medium text-sm transition-colors duration-150 whitespace-nowrap;
   }
 
   .kem-nav-cta {
-    @apply bg-kem-yellow text-kem-dark font-bold text-xs px-4 py-2 rounded-full
-           hover:bg-yellow-300 transition-colors duration-150 whitespace-nowrap;
+    @apply bg-kem-green text-white font-bold text-xs px-4 py-2 rounded-full
+           hover:bg-green-700 transition-colors duration-150 whitespace-nowrap;
+  }
+
+  /* ----- PAGE HEADER (LiveView pages) ----- */
+  .kem-page-header {
+    @apply bg-white border-b border-gray-100 py-6;
+  }
+
+  .kem-page-header-inner {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between;
+  }
+
+  .kem-page-title {
+    @apply text-2xl lg:text-3xl font-black text-kem-dark;
   }
 
   /* ----- HERO CAROUSEL ----- */

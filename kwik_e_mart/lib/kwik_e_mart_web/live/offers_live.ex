@@ -16,14 +16,15 @@ defmodule KwikEMartWeb.OffersLive do
      |> assign(:categories, categories)
      |> assign(:offers, offers)
      |> assign(:selected_category, nil)
-     |> assign(:page_title, "Angebote – EDEKA")}
+     |> assign(:page_title, "Wochenangebote – Kwik-E-Mart")}
   end
 
   @impl true
   def handle_params(%{"category" => cat_id}, _uri, socket) do
     market_id = socket.assigns[:current_market] && socket.assigns.current_market.id
-    offers = Offers.list_offers(market_id: market_id, category_id: String.to_integer(cat_id))
-    {:noreply, assign(socket, offers: offers, selected_category: String.to_integer(cat_id))}
+    cat_id_int = String.to_integer(cat_id)
+    offers = Offers.list_offers(market_id: market_id, category_id: cat_id_int)
+    {:noreply, assign(socket, offers: offers, selected_category: cat_id_int)}
   end
 
   def handle_params(_params, _uri, socket), do: {:noreply, socket}
@@ -40,87 +41,99 @@ defmodule KwikEMartWeb.OffersLive do
     {:noreply, assign(socket, offers: offers, selected_category: nil)}
   end
 
-  defp format_price(price) when is_nil(price), do: ""
+  defp format_price(nil), do: ""
   defp format_price(price) do
-    decimal = Decimal.to_float(price)
-    formatted = :io_lib.format("~.2f", [decimal]) |> to_string() |> String.replace(".", ",")
-    "#{formatted} €"
+    :io_lib.format("~.2f", [Decimal.to_float(price)])
+    |> to_string()
+    |> String.replace(".", ",")
+    |> Kernel.<>(" €")
   end
 
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="max-w-6xl mx-auto px-4 py-8">
-      <div class="flex items-center justify-between mb-6">
-        <h1 class="text-3xl font-bold text-edeka-green">Angebote der Woche</h1>
+    <%!-- Page Header --%>
+    <div class="kem-page-header">
+      <div class="kem-page-header-inner">
+        <div>
+          <h1 class="kem-page-title">Wochenangebote</h1>
+          <p class="text-sm text-gray-500 mt-1">Gültig bis Samstag – solange der Vorrat reicht</p>
+        </div>
         <%= if @current_market do %>
-          <span class="text-sm text-gray-600 bg-green-50 border border-edeka-green rounded-full px-3 py-1">
-            📍 <%= @current_market.name %>
-          </span>
+          <a href={~p"/markt-waehlen"} class="flex items-center gap-2 text-sm font-medium text-kem-green hover:underline">
+            <span class="text-base">📍</span>
+            <span><%= @current_market.name %></span>
+          </a>
         <% else %>
-          <.link navigate={~p"/markt-waehlen"} class="text-sm text-edeka-green underline">
+          <a href={~p"/markt-waehlen"} class="btn-outline-green text-sm py-2 px-4">
             Markt wählen
-          </.link>
+          </a>
         <% end %>
       </div>
+    </div>
 
-      <div class="flex gap-2 mb-6 flex-wrap">
-        <button
-          phx-click="reset_filter"
-          class={["px-4 py-2 rounded-full text-sm font-medium transition-colors",
-                  if(@selected_category == nil, do: "bg-edeka-green text-white", else: "bg-gray-100 text-gray-700 hover:bg-gray-200")]}
-        >
-          Alle
-        </button>
-        <%= for cat <- @categories do %>
+    <%!-- Category Filter --%>
+    <div class="bg-white border-b border-gray-100">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+        <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
           <button
-            phx-click="filter_category"
-            phx-value-id={cat.id}
-            class={["px-4 py-2 rounded-full text-sm font-medium transition-colors",
-                    if(@selected_category == cat.id, do: "bg-edeka-green text-white", else: "bg-gray-100 text-gray-700 hover:bg-gray-200")]}
+            phx-click="reset_filter"
+            class={if(@selected_category == nil, do: "filter-pill filter-pill-active", else: "filter-pill filter-pill-inactive")}
           >
-            <%= cat.icon %> <%= cat.name %>
+            Alle Angebote
           </button>
-        <% end %>
+          <%= for cat <- @categories do %>
+            <button
+              phx-click="filter_category"
+              phx-value-id={cat.id}
+              class={if(@selected_category == cat.id, do: "filter-pill filter-pill-active", else: "filter-pill filter-pill-inactive")}
+            >
+              <%= cat.icon %> <%= cat.name %>
+            </button>
+          <% end %>
+        </div>
       </div>
+    </div>
 
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-        <%= for offer <- @offers do %>
-          <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
-            <div class="relative bg-gray-50 h-40 flex items-center justify-center">
-              <%= if offer.discount_percent && offer.discount_percent >= 30 do %>
-                <div class="absolute top-2 left-2 bg-edeka-green text-white text-xs font-bold px-2 py-1 rounded-full">
-                  SUPERKNÜLLER
-                </div>
-              <% end %>
-              <%= if offer.discount_percent do %>
-                <div class="absolute top-2 right-2 bg-edeka-yellow text-gray-900 text-sm font-bold px-2 py-1 rounded-full">
-                  -<%= offer.discount_percent %>%
-                </div>
-              <% end %>
-              <span class="text-5xl">🛒</span>
-            </div>
-            <div class="p-3">
-              <p class="font-semibold text-gray-900 text-sm leading-tight mb-1"><%= offer.title %></p>
-              <p class="text-xs text-gray-500 mb-2 line-clamp-2"><%= offer.description %></p>
-              <div class="flex items-baseline gap-2">
-                <span class="text-xl font-bold text-edeka-green"><%= format_price(offer.price) %></span>
-                <%= if offer.original_price do %>
-                  <span class="text-xs text-gray-400 line-through"><%= format_price(offer.original_price) %></span>
+    <%!-- Offer Grid --%>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <%= if @offers != [] do %>
+        <div class="offer-grid">
+          <%= for offer <- @offers do %>
+            <div class="offer-card">
+              <div class="offer-card-image">
+                <%= if offer.discount_percent && offer.discount_percent >= 30 do %>
+                  <div class="offer-card-badge-label">Superknüller</div>
                 <% end %>
+                <%= if offer.discount_percent do %>
+                  <div class="offer-card-badge-discount">
+                    -<%= offer.discount_percent %>%
+                  </div>
+                <% end %>
+                <span class="text-5xl">🛒</span>
               </div>
-              <p class="text-xs text-gray-400 mt-1">bis <%= Calendar.strftime(offer.valid_to, "%d.%m.") %></p>
+              <div class="offer-card-body">
+                <p class="offer-card-title"><%= offer.title %></p>
+                <%= if offer.description do %>
+                  <p class="offer-card-desc"><%= offer.description %></p>
+                <% end %>
+                <div class="offer-card-price-row">
+                  <span class="offer-card-price"><%= format_price(offer.price) %></span>
+                  <%= if offer.original_price do %>
+                    <span class="offer-card-original"><%= format_price(offer.original_price) %></span>
+                  <% end %>
+                </div>
+                <p class="offer-card-valid">bis <%= Calendar.strftime(offer.valid_to, "%d.%m.") %></p>
+              </div>
             </div>
-          </div>
-        <% end %>
-      </div>
-
-      <%= if @offers == [] do %>
-        <div class="text-center py-16 text-gray-500">
-          <p class="text-lg">Keine Angebote gefunden.</p>
-          <.link navigate={~p"/markt-waehlen"} class="text-edeka-green underline mt-2 inline-block">
-            Markt wählen für lokale Angebote
-          </.link>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="text-center py-20">
+          <p class="text-4xl mb-4">🛒</p>
+          <p class="text-xl font-bold text-gray-700 mb-2">Keine Angebote gefunden</p>
+          <p class="text-gray-500 mb-6">Wähle einen anderen Filter oder such dir einen Markt in deiner Nähe.</p>
+          <a href={~p"/markt-waehlen"} class="btn-primary">Markt wählen</a>
         </div>
       <% end %>
     </div>

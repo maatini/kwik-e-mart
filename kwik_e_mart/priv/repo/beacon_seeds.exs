@@ -12,7 +12,7 @@ layout_template = ~S"""
         <%!-- Logo --%>
         <a href="/" class="flex items-center gap-3 shrink-0">
           <span class="kem-nav-logo">Kwik-E-Mart</span>
-          <span class="hidden lg:block text-white/60 text-xs leading-tight">
+          <span class="hidden lg:block text-gray-400 text-xs leading-tight">
             Springfield's Finest<br/>Convenience Store
           </span>
         </a>
