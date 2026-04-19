@@ -6,12 +6,13 @@
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)
 ![DevBox](https://img.shields.io/badge/DevBox-Nix-blue?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
 <br/>
 <div align="center"><img src="./docs/assets/github_banner.png" alt="Kwik-E-Mart Banner" width="100%" /></div>
 <br/>
 
-Ein produktionsreifer Clone von [edeka.de](https://www.edeka.de), gebaut mit **Elixir**, **Phoenix LiveView** und **Beacon CMS**.
+Ein technisches Referenzprojekt für einen modernen Supermarkt-Webshop im Simpsons-Stil — gebaut mit **Elixir**, **Phoenix LiveView** und **Beacon CMS**.
 
 ---
 
@@ -31,12 +32,13 @@ Ein produktionsreifer Clone von [edeka.de](https://www.edeka.de), gebaut mit **E
 - [Konfiguration](#konfiguration)
 - [Tests](#tests)
 - [Deployment](#deployment)
+- [Lizenz & Disclaimer](#lizenz--disclaimer)
 
 ---
 
 ## Überblick
 
-Kwik-E-Mart implementiert die zentralen Features von edeka.de:
+Kwik-E-Mart ist ein Fan-Showcase-Projekt für einen Supermarkt-Webshop im Simpsons-Stil. Es demonstriert moderne Elixir/Phoenix-Architektur mit Beacon CMS:
 
 | Feature | Implementierung |
 |---|---|
@@ -75,7 +77,7 @@ Kwik-E-Mart implementiert die zentralen Features von edeka.de:
 ```
 Browser :4000
     └── ProxyEndpoint          # öffentlicher Eingang, leitet weiter
-            ├── KwikEMartEndpoint :4590   # Beacon-Site "edeka"
+            ├── KwikEndpoint :4590        # Beacon-Site (CMS)
             └── Endpoint :4100            # Phoenix-Standard (Dashboard etc.)
 ```
 
@@ -168,9 +170,9 @@ Die App ist unter `http://localhost:4000` erreichbar.
 kwik-e-mart/                      # Repo-Root
 ├── kwik_e_mart/                   # Phoenix-Applikation
 │   ├── assets/
-│   │   ├── css/app.css            # Edeka-spezifische CSS-Komponenten
+│   │   ├── css/app.css            # Kwik-E-Mart CSS-Komponenten
 │   │   ├── js/app.js              # LiveView + Geolocation-Hook
-│   │   └── tailwind.config.js     # Edeka-Farben, Fonts, Screens
+│   │   └── tailwind.config.js     # Kwik-E-Mart Farben, Fonts, Screens
 │   ├── config/
 │   │   ├── config.exs             # Basis-Konfiguration
 │   │   ├── dev.exs                # Entwicklung (DATABASE_URL, Watcher)
@@ -194,7 +196,7 @@ kwik-e-mart/                      # Repo-Root
 │   │       │   ├── recipes_live.ex
 │   │       │   └── components/    # Header, Footer, OfferCard, RecipeTeaser
 │   │       ├── endpoint.ex        # Phoenix-Standard-Endpoint (:4100)
-│   │       ├── edeka_endpoint.ex  # Beacon-Endpoint (:4590)
+│   │       ├── kwik_endpoint.ex   # Beacon-Endpoint (:4590)
 │   │       ├── proxy_endpoint.ex  # Öffentlicher Proxy (:4000)
 │   │       └── router.ex
 │   ├── priv/
@@ -306,7 +308,7 @@ Zugangsdaten werden über Umgebungsvariablen gesetzt (siehe [Konfiguration](#kon
 
 | Konzept | Zweck |
 |---|---|
-| Site `:edeka` | CMS-Site-Identifier |
+| Site `:kwik` | CMS-Site-Identifier |
 | Layouts | Basis-HTML mit Header/Footer |
 | Pages | Einzelne CMS-Seiten (Startseite, Angebote, …) |
 | Components | Wiederverwendbare HEEx-Snippets |
@@ -320,17 +322,17 @@ Zugangsdaten werden über Umgebungsvariablen gesetzt (siehe [Konfiguration](#kon
 
 | Name | Hex | Verwendung |
 |---|---|---|
-| `edeka-green` | `#00A651` | Primärfarbe, CTAs, Header |
-| `edeka-yellow` | `#FFED00` | Akzente, Preisbadges |
-| `edeka-dark` | `#1a1a1a` | Text, Footer |
+| `kem-green` | `#00A651` | Primärfarbe, CTAs, Header |
+| `kem-yellow` | `#FFED00` | Akzente, Preisbadges |
+| `kem-dark` | `#1a1a1a` | Text, Footer |
 
 ### CSS-Komponenten (`app.css`)
 
-- `.edeka-header` — Sticky Navigation
+- `.kem-nav` — Sticky Navigation
 - `.offer-card` — Angebotskarte mit Hover-Effekt
 - `.recipe-card` — Rezept-Teaser
-- `.edeka-cta-primary` / `.edeka-cta-secondary` — Buttons
-- `.edeka-badge` — Preis- und Saison-Badges
+- `.kem-cta-primary` / `.kem-cta-secondary` — Buttons
+- `.kem-badge` — Preis- und Saison-Badges
 
 ### Typografie
 
@@ -382,6 +384,9 @@ mix test --cover
 | `KwikEMart.MarketsTest` | Suche, Geolocation, CRUD |
 | `KwikEMart.OffersTest` | Filter, Datumslogik, Preisvalidierung |
 | `KwikEMart.RecipesTest` | Saisonal, Tags, Kategorie-Filter |
+| `MarketFinderLiveTest` | Suche, Marktauswahl, Leersuche |
+| `OffersLiveTest` | Kategorie-Filter, Reset, Leerliste |
+| `RecipesLiveTest` | Saisonal-Toggle, Kategorie-Filter, Reset |
 
 ---
 
@@ -416,4 +421,15 @@ fly secrets set SECRET_KEY_BASE=$(mix phx.gen.secret)
 fly secrets set DATABASE_URL=<connection-string>
 fly secrets set ADMIN_PASSWORD=<sicheres-passwort>
 fly deploy
+
+---
+
+## Lizenz & Disclaimer
+
+Dieses Projekt steht unter der **[MIT-Lizenz](LICENSE)**.
+
+> **Disclaimer:** Kwik-E-Mart ist ein **Fan-Projekt** und technisches Showcase ohne kommerzielle Absichten.  
+> „Kwik-E-Mart", „Simpsons" und alle verwandten Charaktere und Marken sind Eigentum von  
+> **The Walt Disney Company / 20th Television** bzw. **Matt Groening**.  
+> Dieses Projekt hat keine Verbindung zu diesen Unternehmen.
 ```
