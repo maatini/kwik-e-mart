@@ -2,10 +2,10 @@ import Config
 
 # Beacon: use :testing mode so it doesn't hot-load resources or broadcast events during tests
 config :beacon,
-  edeka: [
-    site: :edeka,
+  kwik: [
+    site: :kwik,
     repo: KwikEMart.Repo,
-    endpoint: KwikEMartWeb.EdekaEndpoint,
+    endpoint: KwikEMartWeb.KwikEndpoint,
     router: KwikEMartWeb.Router,
     mode: :testing
   ]

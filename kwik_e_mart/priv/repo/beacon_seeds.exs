@@ -105,7 +105,7 @@ layout_template = ~S"""
 """
 
 layout =
-  case Content.list_layouts(:edeka) |> Enum.find(&(&1.title == "Kwik-E-Mart Standard")) do
+  case Content.list_layouts(:kwik) |> Enum.find(&(&1.title == "Kwik-E-Mart Standard")) do
     %Content.Layout{} = existing ->
       IO.puts("⏭  Layout aktualisieren…")
       {:ok, updated} = Content.update_layout(existing, %{
@@ -121,7 +121,7 @@ layout =
 
     nil ->
       l = Content.create_layout!(%{
-        site: :edeka,
+        site: :kwik,
         title: "Kwik-E-Mart Standard",
         template: layout_template,
         resource_links: [
@@ -567,7 +567,7 @@ page_template = ~S"""
 """
 
 page =
-  case Content.get_page_by(:edeka, path: "/") do
+  case Content.get_page_by(:kwik, path: "/") do
     %Content.Page{} = existing ->
       IO.puts("⏭  Seite aktualisieren…")
       {:ok, updated} = Content.update_page(existing, %{
@@ -578,7 +578,7 @@ page =
 
     nil ->
       p = Content.create_page!(%{
-        site: :edeka,
+        site: :kwik,
         path: "/",
         title: "Willkommen im Kwik-E-Mart",
         layout_id: layout.id,

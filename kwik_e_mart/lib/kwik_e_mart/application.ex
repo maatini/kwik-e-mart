@@ -11,11 +11,11 @@ defmodule KwikEMart.Application do
       KwikEMartWeb.Telemetry,
       KwikEMart.Repo,
       {DNSCluster, query: Application.get_env(:kwik_e_mart, :dns_cluster_query) || :ignore},
-      {Beacon, [sites: [Application.fetch_env!(:beacon, :edeka)]]},
+      {Beacon, [sites: [Application.fetch_env!(:beacon, :kwik)]]},
       {Phoenix.PubSub, name: KwikEMart.PubSub},
       # Start the Finch HTTP client for sending emails
       {Finch, name: KwikEMart.Finch},
-      KwikEMartWeb.EdekaEndpoint,
+      KwikEMartWeb.KwikEndpoint,
       # Start a worker by calling: KwikEMart.Worker.start_link(arg)
       # {KwikEMart.Worker, arg},
       # Start to serve requests, typically the last entry

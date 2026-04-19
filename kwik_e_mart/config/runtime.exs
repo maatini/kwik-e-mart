@@ -1,9 +1,9 @@
 import Config
 
 beacon_base_config = [
-  site: :edeka,
+  site: :kwik,
   repo: KwikEMart.Repo,
-  endpoint: KwikEMartWeb.EdekaEndpoint,
+  endpoint: KwikEMartWeb.KwikEndpoint,
   router: KwikEMartWeb.Router
 ]
 
@@ -12,7 +12,7 @@ beacon_site_config =
     do: Keyword.put(beacon_base_config, :mode, :testing),
     else: beacon_base_config
 
-config :beacon, edeka: beacon_site_config
+config :beacon, kwik: beacon_site_config
 
 # config/runtime.exs is executed for all environments, including
 # during releases. It is executed after compilation and before the
@@ -79,7 +79,7 @@ if config_env() == :prod do
     secret_key_base: secret_key_base,
     server: !!System.get_env("PHX_SERVER")
 
-  config :kwik_e_mart, KwikEMartWeb.EdekaEndpoint,
+  config :kwik_e_mart, KwikEMartWeb.KwikEndpoint,
     url: [host: host, port: 8551, scheme: "https"],
     http: [ip: {0, 0, 0, 0, 0, 0, 0, 0}, port: 4590],
     secret_key_base: secret_key_base,

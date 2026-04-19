@@ -60,6 +60,6 @@ defmodule KwikEMartWeb.Router do
   # Beacon CMS – Kwik-E-Mart Site unter "/"
   scope "/", alias: KwikEMartWeb do
     pipe_through [:browser, :beacon]
-    beacon_site("/", site: :edeka)
+    beacon_site("/", site: :kwik)
   end
 end

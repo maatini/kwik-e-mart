@@ -2,7 +2,7 @@ import Config
 secret_key_base = "VGu0meDUddyIP8jeOIwHGkrv1Jp4A09/knM/3LsUh3iJUzrovaHdz0LyILYSvGWC"
 
 config :kwik_e_mart,
-       KwikEMartWeb.EdekaEndpoint,
+       KwikEMartWeb.KwikEndpoint,
        http: [ip: {127, 0, 0, 1}, port: 4590],
        check_origin: false,
        code_reloader: true,

@@ -1,4 +1,4 @@
-defmodule KwikEMartWeb.EdekaEndpoint do
+defmodule KwikEMartWeb.KwikEndpoint do
   use Phoenix.Endpoint, otp_app: :kwik_e_mart
 
   @session_options Application.compile_env!(:kwik_e_mart, :session_options)

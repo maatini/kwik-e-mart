@@ -10,7 +10,7 @@ import Config
 signing_salt = "ElJaGz4v"
 
 config :kwik_e_mart,
-       KwikEMartWeb.EdekaEndpoint,
+       KwikEMartWeb.KwikEndpoint,
        url: [host: "localhost"],
        adapter: Bandit.PhoenixAdapter,
        render_errors: [
