@@ -27,7 +27,7 @@ defmodule KwikEMartWeb.Router do
 
   defp basic_auth(conn, _opts) do
     username = Application.get_env(:kwik_e_mart, :admin_username, "admin")
-    password = Application.get_env(:kwik_e_mart, :admin_password, "edeka_admin")
+    password = Application.get_env(:kwik_e_mart, :admin_password, "kwik_e_mart_admin")
     Plug.BasicAuth.basic_auth(conn, username: username, password: password)
   end
 
@@ -57,7 +57,7 @@ defmodule KwikEMartWeb.Router do
     end
   end
 
-  # Beacon CMS – Edeka-Site unter "/"
+  # Beacon CMS – Kwik-E-Mart Site unter "/"
   scope "/", alias: KwikEMartWeb do
     pipe_through [:browser, :beacon]
     beacon_site("/", site: :edeka)

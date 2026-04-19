@@ -1,12 +1,18 @@
 import Config
 
-config :beacon,
-  edeka: [
-    site: :edeka,
-    repo: KwikEMart.Repo,
-    endpoint: KwikEMartWeb.EdekaEndpoint,
-    router: KwikEMartWeb.Router
-  ]
+beacon_base_config = [
+  site: :edeka,
+  repo: KwikEMart.Repo,
+  endpoint: KwikEMartWeb.EdekaEndpoint,
+  router: KwikEMartWeb.Router
+]
+
+beacon_site_config =
+  if config_env() == :test,
+    do: Keyword.put(beacon_base_config, :mode, :testing),
+    else: beacon_base_config
+
+config :beacon, edeka: beacon_site_config
 
 # config/runtime.exs is executed for all environments, including
 # during releases. It is executed after compilation and before the

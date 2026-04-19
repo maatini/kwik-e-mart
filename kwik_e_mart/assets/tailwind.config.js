@@ -18,10 +18,6 @@ module.exports = {
         "kem-red":    "#E3001B",
         "kem-dark":   "#1a1a1a",
         "kem-gray":   "#f5f5f5",
-        // Aliases für Legacy-Klassen
-        "edeka-green":  "#00A651",
-        "edeka-yellow": "#FFED00",
-        "edeka-dark":   "#1a1a1a",
       },
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],

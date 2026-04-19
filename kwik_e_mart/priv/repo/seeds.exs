@@ -108,7 +108,7 @@ offers_data = [
     title: "Squishee Tropical 0,5l",
     description: "Der Original Springfield Slush in fruchtig-tropischer Geschmacksrichtung. Jetzt im Sommerangebot!",
     price: "0.99", original_price: "1.49", discount_percent: 34,
-    image_url: "/images/squishee-tropical.jpg",
+    image_url: "/images/squishee-tropical.svg",
     valid_from: valid_from, valid_to: valid_to,
     market_id: mkt_downtown.id, category_id: cat_getraenke.id
   },
@@ -116,7 +116,7 @@ offers_data = [
     title: "Duff Beer 6-Pack 0,33l",
     description: "Homers Lieblingsgetränk im praktischen Sixpack. Kalt gestellt und fertig für den Feierabend.",
     price: "4.99", original_price: "6.99", discount_percent: 29,
-    image_url: "/images/duff-beer.jpg",
+    image_url: "/images/duff-beer.svg",
     valid_from: valid_from, valid_to: valid_to,
     market_id: mkt_downtown.id, category_id: cat_getraenke.id
   },
@@ -124,7 +124,7 @@ offers_data = [
     title: "Buzz Cola 1,5l",
     description: "Springfield's koffeinreichste Cola. Der Favorit von Bart und seinen Freunden.",
     price: "0.89", original_price: "1.29", discount_percent: 31,
-    image_url: "/images/buzz-cola.jpg",
+    image_url: "/images/buzz-cola.svg",
     valid_from: valid_from, valid_to: valid_to,
     market_id: mkt_shelby.id, category_id: cat_getraenke.id
   },
@@ -132,7 +132,7 @@ offers_data = [
     title: "Squishee Berry Blast 0,5l",
     description: "Waldbeeren-Squishee in der limitierten Sommerediton. Nur solange der Vorrat reicht!",
     price: "0.99", original_price: "1.49", discount_percent: 34,
-    image_url: "/images/squishee-berry.jpg",
+    image_url: "/images/squishee-berry.svg",
     valid_from: valid_from, valid_to: valid_to,
     market_id: mkt_heights.id, category_id: cat_getraenke.id
   },
@@ -142,7 +142,7 @@ offers_data = [
     title: "Kwik-E-Mart Hot Dog",
     description: "Klassischer Springfield Hot Dog – seit 3 Tagen auf der Rolle, garantiert warm. Mit Senf nach Wahl.",
     price: "1.79", original_price: "2.49", discount_percent: 28,
-    image_url: "/images/hot-dog.jpg",
+    image_url: "/images/hot-dog.svg",
     valid_from: valid_from, valid_to: valid_to,
     market_id: mkt_downtown.id, category_id: cat_snacks.id
   },
@@ -150,7 +150,7 @@ offers_data = [
     title: "Ribwich Burger (limitiert)",
     description: "Der legendäre Ribwich ist zurück! Nur für kurze Zeit – hol ihn dir, bevor Homer alles aufisst.",
     price: "3.49", original_price: "4.99", discount_percent: 30,
-    image_url: "/images/ribwich.jpg",
+    image_url: "/images/ribwich.svg",
     valid_from: valid_from, valid_to: valid_to,
     market_id: mkt_downtown.id, category_id: cat_snacks.id
   },
@@ -158,7 +158,7 @@ offers_data = [
     title: "Chief Wiggum's Hot Sauce 150ml",
     description: "Schärfer als das Springfield PD! Handgemachte Hot Sauce mit echten Springfield-Jalapeños.",
     price: "2.29", original_price: "3.19", discount_percent: 28,
-    image_url: "/images/hot-sauce.jpg",
+    image_url: "/images/hot-sauce.svg",
     valid_from: valid_from, valid_to: valid_to,
     market_id: mkt_shelby.id, category_id: cat_snacks.id
   },
@@ -166,7 +166,7 @@ offers_data = [
     title: "Springfield Donuts 6 Stück",
     description: "Pink glasierte Donuts mit Streuseln – Homers ewige Schwäche. Frisch aus dem Kwik-E-Mart-Ofen.",
     price: "1.99", original_price: "2.99", discount_percent: 33,
-    image_url: "/images/donuts.jpg",
+    image_url: "/images/donuts.svg",
     valid_from: valid_from, valid_to: valid_to,
     market_id: mkt_heights.id, category_id: cat_snacks.id
   },
@@ -176,7 +176,7 @@ offers_data = [
     title: "Krusty-O's Cerealien 500g",
     description: "Das Frühstücks-Cerealien von Krusty dem Clown! Mit O-Vitamin angereichert (Warnhinweis auf der Rückseite lesen).",
     price: "2.49", original_price: "3.99", discount_percent: 38,
-    image_url: "/images/krusty-os.jpg",
+    image_url: "/images/krusty-os.svg",
     valid_from: valid_from, valid_to: valid_to,
     market_id: mkt_downtown.id, category_id: cat_fruehstueck.id
   },
@@ -184,7 +184,7 @@ offers_data = [
     title: "Apu's Chai Masala Tee 20 Beutel",
     description: "Apus persönliches Familienrezept aus Indien. Würzig, aromatisch, der perfekte Morgenstart.",
     price: "1.99", original_price: "2.79", discount_percent: 29,
-    image_url: "/images/chai-masala.jpg",
+    image_url: "/images/chai-masala.svg",
     valid_from: valid_from, valid_to: valid_to,
     market_id: mkt_capital.id, category_id: cat_fruehstueck.id
   },
@@ -194,7 +194,7 @@ offers_data = [
     title: "Apu's Curry-Paste 200g",
     description: "Apus geheimes Familienrezept – milde bis feurige Currypaste aus echter Springfield-Produktion.",
     price: "1.79", original_price: "2.49", discount_percent: 28,
-    image_url: "/images/curry-paste.jpg",
+    image_url: "/images/curry-paste.svg",
     valid_from: valid_from, valid_to: valid_to,
     market_id: mkt_downtown.id, category_id: cat_eigen.id
   },
@@ -202,7 +202,7 @@ offers_data = [
     title: "Kwik-E-Mart Energie-Riegel 3er-Pack",
     description: "Für den langen Schichtdienst: Apus bewährter Energie-Riegel. Hält 24 Stunden frisch – genau wie wir.",
     price: "1.49", original_price: "1.99", discount_percent: 25,
-    image_url: "/images/energie-riegel.jpg",
+    image_url: "/images/energie-riegel.svg",
     valid_from: valid_from, valid_to: valid_to,
     market_id: mkt_shelby.id, category_id: cat_eigen.id
   },
@@ -212,7 +212,7 @@ offers_data = [
     title: "Springfield Lottoschein",
     description: "Diese Woche Jackpot: 42 Millionen Dollar! Holen Sie sich Ihren Schein – Apu verkauft nur Gewinnlos.",
     price: "1.00", original_price: "1.00", discount_percent: 0,
-    image_url: "/images/lotto.jpg",
+    image_url: "/images/lotto.svg",
     valid_from: valid_from, valid_to: valid_to,
     market_id: mkt_downtown.id, category_id: cat_lotterie.id
   },
@@ -220,7 +220,7 @@ offers_data = [
     title: "Scratchy's Rubbel-Los",
     description: "Neu! Das Scratchy-Rubbellos mit Gewinnchancen von 1:1.000.000. Itchy nicht inbegriffen.",
     price: "2.00", original_price: "2.00", discount_percent: 0,
-    image_url: "/images/rubbellos.jpg",
+    image_url: "/images/rubbellos.svg",
     valid_from: valid_from, valid_to: valid_to,
     market_id: mkt_ogden.id, category_id: cat_lotterie.id
   }
@@ -245,7 +245,7 @@ recipes_data = [
     ],
     instructions: "Hähnchen würfeln und anbraten. Zwiebel, Knoblauch und Ingwer anschwitzen. Curry-Paste einrühren, 2 Min. rösten. Tomaten und Kokosmilch zugeben, 20 Min. köcheln. Mit Garam Masala abschmecken. Mit Reis und frischem Koriander servieren.",
     prep_time: 45,
-    image_url: "/images/rezept-tikka-masala.jpg",
+    image_url: "/images/rezept-tikka-masala.svg",
     tags: ["indisch", "hähnchen", "apu", "hauptgericht"],
     seasonal: false,
     category_id: cat_apu.id
@@ -260,7 +260,7 @@ recipes_data = [
     ],
     instructions: "Donuts in Stücke reißen. Eier, Milch, Sahne, Zucker und Vanille verquirlen. Donuts einweichen, 30 Min. ziehen lassen. In gefetteter Form bei 175°C, 35 Min. backen. Warm mit Glasur servieren.",
     prep_time: 60,
-    image_url: "/images/rezept-donut-pudding.jpg",
+    image_url: "/images/rezept-donut-pudding.svg",
     tags: ["dessert", "backen", "homer", "süß"],
     seasonal: false,
     category_id: cat_homer.id
@@ -274,7 +274,7 @@ recipes_data = [
     ],
     instructions: "Gefrorenen Squishee, Banane, Mango und Kokosmilch im Mixer cremig pürieren. In Bowl füllen. Mit Granola, Früchten und Kokosflocken garnieren. Sofort servieren!",
     prep_time: 10,
-    image_url: "/images/rezept-smoothie-bowl.jpg",
+    image_url: "/images/rezept-smoothie-bowl.svg",
     tags: ["frühstück", "schnell", "vegan", "bunt"],
     seasonal: true,
     category_id: cat_schnell.id
@@ -289,7 +289,7 @@ recipes_data = [
     ],
     instructions: "Tomaten, Zwiebel und Jalapeños fein würfeln. Knoblauch pressen. Koriander hacken. Alles vermengen, mit Limettensaft und Salz abschmecken. 30 Min. ziehen lassen. Mit Tortilla-Chips servieren.",
     prep_time: 15,
-    image_url: "/images/rezept-salsa.jpg",
+    image_url: "/images/rezept-salsa.svg",
     tags: ["snack", "scharf", "vegan", "schnell"],
     seasonal: false,
     category_id: cat_schnell.id
@@ -304,7 +304,7 @@ recipes_data = [
     ],
     instructions: "Hackfleisch mit Zwiebel und Knoblauch anbraten. Tomatensauce zugeben, 15 Min. köcheln. Ricotta mit Kräutern mischen. Lasagne schichten: Sauce – Nudeln – Ricotta – Mozzarella. Wiederholen. Mit Parmesan abschließen. Bei 180°C, 45 Min. backen.",
     prep_time: 90,
-    image_url: "/images/rezept-lasagne.jpg",
+    image_url: "/images/rezept-lasagne.svg",
     tags: ["hauptgericht", "pasta", "marge", "familienrezept"],
     seasonal: false,
     category_id: cat_homer.id
@@ -319,7 +319,7 @@ recipes_data = [
     ],
     instructions: "Kichererbsen grob zerdrücken. Zwiebel und Knoblauch fein hacken, anschwitzen. Mit Erbsen, Haferflocken und Gewürzen zu einer Masse formen. Patties formen, 4 Min. pro Seite braten. Im Brötchen mit Beilagen servieren.",
     prep_time: 30,
-    image_url: "/images/rezept-vegan-burger.jpg",
+    image_url: "/images/rezept-vegan-burger.svg",
     tags: ["vegan", "vegetarisch", "burger", "lisa"],
     seasonal: false,
     category_id: cat_veg.id
@@ -333,7 +333,7 @@ recipes_data = [
     ],
     instructions: "Mango schälen und würfeln. Mit Joghurt, Milch, Zucker und Kardamom im Mixer cremig pürieren. Mit Eiswürfeln in hohe Gläser füllen. Mit Minze garnieren. Sofort servieren.",
     prep_time: 10,
-    image_url: "/images/rezept-mango-lassi.jpg",
+    image_url: "/images/rezept-mango-lassi.svg",
     tags: ["getränk", "indisch", "erfrischend", "schnell"],
     seasonal: true,
     category_id: cat_schnell.id
@@ -349,7 +349,7 @@ recipes_data = [
     ],
     instructions: "Hackfleisch scharf anbraten. Zwiebeln und Knoblauch zugeben. Chipotle, Gewürze und Tomaten einrühren. Bohnen zugeben. 1 Std. auf kleiner Flamme köcheln. Schokolade einrühren. Mit Saurer Sahne und Cheddar servieren.",
     prep_time: 75,
-    image_url: "/images/rezept-chili.jpg",
+    image_url: "/images/rezept-chili.svg",
     tags: ["hauptgericht", "scharf", "homer", "chili"],
     seasonal: false,
     category_id: cat_homer.id

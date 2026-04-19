@@ -3,14 +3,14 @@ defmodule KwikEMartWeb.FooterComponent do
 
   def footer(assigns) do
     ~H"""
-    <footer class="edeka-footer">
-      <div class="edeka-footer-inner">
+    <footer class="kem-footer">
+      <div class="kem-footer-inner">
         <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
           <div>
             <div class="text-white font-black text-2xl tracking-tight mb-4">
-              <span class="text-edeka-yellow">E</span>DEKA
+              <span class="text-kem-yellow">K</span>wik-E-Mart
             </div>
-            <p class="text-gray-400 text-sm">Wir lieben Lebensmittel.</p>
+            <p class="text-gray-400 text-sm">Thank you, come again!</p>
           </div>
           <div>
             <h4 class="text-white font-semibold mb-3">Einkaufen</h4>
@@ -21,7 +21,7 @@ defmodule KwikEMartWeb.FooterComponent do
             </ul>
           </div>
           <div>
-            <h4 class="text-white font-semibold mb-3">Über EDEKA</h4>
+            <h4 class="text-white font-semibold mb-3">Über Kwik-E-Mart</h4>
             <ul class="space-y-2 text-sm text-gray-400">
               <li><span class="hover:text-white transition-colors cursor-pointer">Unternehmen</span></li>
               <li><span class="hover:text-white transition-colors cursor-pointer">Karriere</span></li>
@@ -38,7 +38,7 @@ defmodule KwikEMartWeb.FooterComponent do
           </div>
         </div>
         <div class="border-t border-gray-700 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p class="text-gray-500 text-xs">© 2026 EDEKA Zentrale AG & Co. KG</p>
+          <p class="text-gray-500 text-xs">© 2026 Kwik-E-Mart, Springfield</p>
           <p class="text-gray-600 text-xs">Powered by Phoenix + Beacon CMS</p>
         </div>
       </div>

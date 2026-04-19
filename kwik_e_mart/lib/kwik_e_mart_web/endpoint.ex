@@ -2,6 +2,10 @@ defmodule KwikEMartWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :kwik_e_mart
   @session_options Application.compile_env!(:kwik_e_mart, :session_options)
 
+  if Application.compile_env(:kwik_e_mart, :sql_sandbox) do
+    plug Phoenix.Ecto.SQL.Sandbox
+  end
+
   # Serve at "/" the static files from "priv/static" directory.
   #
   # You should set gzip to true if you are running phx.digest

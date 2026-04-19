@@ -1,5 +1,15 @@
 import Config
 
+# Beacon: use :testing mode so it doesn't hot-load resources or broadcast events during tests
+config :beacon,
+  edeka: [
+    site: :edeka,
+    repo: KwikEMart.Repo,
+    endpoint: KwikEMartWeb.EdekaEndpoint,
+    router: KwikEMartWeb.Router,
+    mode: :testing
+  ]
+
 # Configure your database
 #
 # The MIX_TEST_PARTITION environment variable can be used
@@ -24,6 +34,9 @@ config :kwik_e_mart, KwikEMart.Mailer, adapter: Swoosh.Adapters.Test
 
 # Disable swoosh api client as it is only required for production adapters
 config :swoosh, :api_client, false
+
+# Enable Phoenix.Ecto.SQL.Sandbox plug for LiveView tests
+config :kwik_e_mart, sql_sandbox: true
 
 # Print only warnings and errors during test
 config :logger, level: :warning
