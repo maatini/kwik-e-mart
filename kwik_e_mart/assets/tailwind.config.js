@@ -1,6 +1,3 @@
-// See the Tailwind configuration guide for advanced usage
-// https://tailwindcss.com/docs/configuration
-
 const plugin = require("tailwindcss/plugin")
 const fs = require("fs")
 const path = require("path")
@@ -15,9 +12,16 @@ module.exports = {
     extend: {
       colors: {
         brand: "#FD4F00",
-        "edeka-green": "#00A651",
+        // Kwik-E-Mart / Edeka Design Tokens
+        "kem-green":  "#00A651",
+        "kem-yellow": "#FFED00",
+        "kem-red":    "#E3001B",
+        "kem-dark":   "#1a1a1a",
+        "kem-gray":   "#f5f5f5",
+        // Aliases für Legacy-Klassen
+        "edeka-green":  "#00A651",
         "edeka-yellow": "#FFED00",
-        "edeka-dark": "#1a1a1a",
+        "edeka-dark":   "#1a1a1a",
       },
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
@@ -25,22 +29,41 @@ module.exports = {
       screens: {
         xs: "475px",
       },
+      animation: {
+        "carousel":    "kem-carousel 15s infinite",
+        "fade-in":     "kem-fade-in 0.4s ease-out",
+        "slide-up":    "kem-slide-up 0.4s ease-out",
+      },
+      keyframes: {
+        "kem-carousel": {
+          "0%, 28%":   { transform: "translateX(0%)" },
+          "33%, 61%":  { transform: "translateX(-33.333%)" },
+          "66%, 94%":  { transform: "translateX(-66.666%)" },
+          "100%":      { transform: "translateX(0%)" },
+        },
+        "kem-fade-in": {
+          from: { opacity: "0" },
+          to:   { opacity: "1" },
+        },
+        "kem-slide-up": {
+          from: { opacity: "0", transform: "translateY(12px)" },
+          to:   { opacity: "1", transform: "translateY(0)" },
+        },
+      },
+      boxShadow: {
+        "card":    "0 2px 8px rgba(0,0,0,0.08)",
+        "card-lg": "0 4px 20px rgba(0,0,0,0.12)",
+      },
+      borderRadius: {
+        "card": "16px",
+      },
     },
   },
   plugins: [
     require("@tailwindcss/forms"),
-    // Allows prefixing tailwind classes with LiveView classes to add rules
-    // only when LiveView classes are applied, for example:
-    //
-    //     <div class="phx-click-loading:animate-ping">
-    //
-    plugin(({addVariant}) => addVariant("phx-click-loading", [".phx-click-loading&", ".phx-click-loading &"])),
+    plugin(({addVariant}) => addVariant("phx-click-loading",  [".phx-click-loading&",  ".phx-click-loading &"])),
     plugin(({addVariant}) => addVariant("phx-submit-loading", [".phx-submit-loading&", ".phx-submit-loading &"])),
     plugin(({addVariant}) => addVariant("phx-change-loading", [".phx-change-loading&", ".phx-change-loading &"])),
-
-    // Embeds Heroicons (https://heroicons.com) into your app.css bundle
-    // See your `CoreComponents.icon/1` for more information.
-    //
     plugin(function({matchComponents, theme}) {
       let iconsDir = path.join(__dirname, "../deps/heroicons/optimized")
       let values = {}
@@ -60,11 +83,8 @@ module.exports = {
         "hero": ({name, fullPath}) => {
           let content = fs.readFileSync(fullPath).toString().replace(/\r?\n|\r/g, "")
           let size = theme("spacing.6")
-          if (name.endsWith("-mini")) {
-            size = theme("spacing.5")
-          } else if (name.endsWith("-micro")) {
-            size = theme("spacing.4")
-          }
+          if (name.endsWith("-mini")) size = theme("spacing.5")
+          else if (name.endsWith("-micro")) size = theme("spacing.4")
           return {
             [`--hero-${name}`]: `url('data:image/svg+xml;utf8,${content}')`,
             "-webkit-mask": `var(--hero-${name})`,
