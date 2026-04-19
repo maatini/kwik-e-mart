@@ -1,5 +1,16 @@
 # Kwik-E-Mart
 
+![Elixir](https://img.shields.io/badge/Elixir-1.18-4B275F?style=for-the-badge&logo=elixir&logoColor=white)
+![Phoenix](https://img.shields.io/badge/Phoenix-1.7-FD4F00?style=for-the-badge&logo=elixir&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)
+![DevBox](https://img.shields.io/badge/DevBox-Nix-blue?style=for-the-badge)
+
+<br/>
+<div align="center"><img src="./docs/assets/github_banner.png" alt="Kwik-E-Mart Banner" width="100%" /></div>
+<br/>
+
 Ein produktionsreifer Clone von [edeka.de](https://www.edeka.de), gebaut mit **Elixir**, **Phoenix LiveView** und **Beacon CMS**.
 
 ---

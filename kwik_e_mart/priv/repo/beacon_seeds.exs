@@ -5,20 +5,6 @@ alias Beacon.Content
 # ---------------------------------------------------------------------------
 
 layout_template = ~S"""
-<!DOCTYPE html>
-<html lang="de" class="scroll-smooth">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title><%= @beacon_live_data[:page_title] || "Kwik-E-Mart – Thank you, come again!" %></title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/assets/app.css" />
-    <script defer src="/assets/app.js"></script>
-  </head>
-  <body class="bg-white font-sans text-gray-900 antialiased">
-
     <%!-- NAVIGATION --%>
     <nav class="kem-nav">
       <div class="kem-nav-inner">
@@ -116,23 +102,42 @@ layout_template = ~S"""
         </div>
       </div>
     </footer>
-
-  </body>
-</html>
 """
 
 layout =
   case Content.list_layouts(:edeka) |> Enum.find(&(&1.title == "Kwik-E-Mart Standard")) do
     %Content.Layout{} = existing ->
       IO.puts("⏭  Layout aktualisieren…")
-      {:ok, updated} = Content.update_layout(existing, %{template: layout_template})
+      {:ok, updated} = Content.update_layout(existing, %{
+        template: layout_template,
+        resource_links: [
+          %{"rel" => "preconnect", "href" => "https://fonts.googleapis.com"},
+          %{"rel" => "preconnect", "href" => "https://fonts.gstatic.com", "crossorigin" => ""},
+          %{"rel" => "stylesheet", "href" => "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap"},
+          %{"rel" => "stylesheet", "href" => "/assets/app.css"}
+        ]
+      })
       updated
 
     nil ->
-      l = Content.create_layout!(%{site: :edeka, title: "Kwik-E-Mart Standard", template: layout_template})
-      IO.puts("✅ Layout erstellt: #{l.id}")
+      l = Content.create_layout!(%{
+        site: :edeka,
+        title: "Kwik-E-Mart Standard",
+        template: layout_template,
+        resource_links: [
+          %{"rel" => "preconnect", "href" => "https://fonts.googleapis.com"},
+          %{"rel" => "preconnect", "href" => "https://fonts.gstatic.com", "crossorigin" => ""},
+          %{"rel" => "stylesheet", "href" => "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap"},
+          %{"rel" => "stylesheet", "href" => "/assets/app.css"}
+        ]
+      })
+      Content.publish_layout(l)
+      IO.puts("✅ Layout erstellt + veröffentlicht: #{l.id}")
       l
   end
+
+Content.publish_layout(layout)
+IO.puts("✅ Layout veröffentlicht: #{layout.id}")
 
 # ---------------------------------------------------------------------------
 # Startseite
