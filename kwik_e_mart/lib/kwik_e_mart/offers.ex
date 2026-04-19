@@ -11,6 +11,7 @@ defmodule KwikEMart.Offers do
   # Offers
   # ---------------------------------------------------------------------------
 
+  @spec list_offers(keyword()) :: [Offer.t()]
   def list_offers(opts \\ []) do
     Cache.fetch_offers(opts, fn -> do_list_offers(opts) end)
   end
@@ -41,6 +42,7 @@ defmodule KwikEMart.Offers do
   defp filter_by_superknueller(query, false), do: query
   defp filter_by_superknueller(query, true), do: where(query, [o], o.discount_percent >= 30)
 
+  @spec list_featured_offers(pos_integer()) :: [Offer.t()]
   def list_featured_offers(limit \\ 6) do
     Cache.fetch_featured_offers(limit, fn ->
       today = Date.utc_today()
@@ -55,20 +57,24 @@ defmodule KwikEMart.Offers do
     end)
   end
 
+  @spec get_offer!(pos_integer()) :: Offer.t()
   def get_offer!(id), do: Repo.get!(Offer, id) |> Repo.preload([:market, :category])
 
+  @spec create_offer(map()) :: {:ok, Offer.t()} | {:error, Ecto.Changeset.t()}
   def create_offer(attrs) do
     result = %Offer{} |> Offer.changeset(attrs) |> Repo.insert()
     if match?({:ok, _}, result), do: Cache.invalidate_offers()
     result
   end
 
+  @spec update_offer(Offer.t(), map()) :: {:ok, Offer.t()} | {:error, Ecto.Changeset.t()}
   def update_offer(%Offer{} = offer, attrs) do
     result = offer |> Offer.changeset(attrs) |> Repo.update()
     if match?({:ok, _}, result), do: Cache.invalidate_offers()
     result
   end
 
+  @spec delete_offer(Offer.t()) :: {:ok, Offer.t()} | {:error, Ecto.Changeset.t()}
   def delete_offer(%Offer{} = offer) do
     result = Repo.delete(offer)
     if match?({:ok, _}, result), do: Cache.invalidate_offers()
@@ -89,17 +95,18 @@ defmodule KwikEMart.Offers do
 
   CSV columns: title,description,price,original_price,discount_percent,category_slug,featured,image_url
   """
+  @spec import_weekly_offers(String.t()) :: {:ok, non_neg_integer()} | {:error, term()}
   def import_weekly_offers(path \\ default_import_path()) do
-    Logger.info("[KwikEMart] 🥤 Loading this week's Super-Duff-Deals from #{path}…")
+    Logger.info("[KwikEMart] Loading this week's offers from #{path}...")
 
     with {:ok, content} <- File.read(path),
          {:ok, rows} <- parse_csv(content),
          {:ok, count} <- insert_offers(rows) do
-      Logger.info("[KwikEMart] ✅ #{count} Angebote für diese Woche importiert. Thank you, come again!")
+      Logger.info("[KwikEMart] #{count} Angebote importiert. Thank you, come again!")
       {:ok, count}
     else
       {:error, reason} ->
-        Logger.error("[KwikEMart] ❌ Import fehlgeschlagen: #{inspect(reason)}")
+        Logger.error("[KwikEMart] Import fehlgeschlagen: #{inspect(reason)}")
         {:error, reason}
     end
   end
@@ -136,40 +143,46 @@ defmodule KwikEMart.Offers do
     valid_from = today
     valid_to = Date.add(today, 6)
 
-    results =
-      Enum.map(rows, fn row ->
-        category_id = get_category_id_by_slug(row.category_slug)
-
-        attrs = %{
-          title: row.title,
-          description: row.description,
-          price: parse_decimal(row.price),
-          original_price: parse_decimal(row.original_price),
-          discount_percent: parse_integer(row.discount_percent),
-          image_url: row.image_url,
-          valid_from: valid_from,
-          valid_to: valid_to,
-          category_id: category_id
-        }
-
-        case create_offer(attrs) do
-          {:ok, _offer} -> :ok
-          {:error, changeset} ->
-            Logger.warning("[KwikEMart] ⚠️  Angebot '#{row.title}' übersprungen: #{inspect(changeset.errors)}")
-            :skip
-        end
+    multi =
+      rows
+      |> Enum.with_index()
+      |> Enum.reduce(Ecto.Multi.new(), fn {row, idx}, multi ->
+        attrs = build_offer_attrs(row, valid_from, valid_to)
+        changeset = %Offer{} |> Offer.changeset(attrs)
+        Ecto.Multi.insert(multi, {:offer, idx}, changeset)
       end)
 
-    count = Enum.count(results, &(&1 == :ok))
-    Cache.invalidate_offers()
-    {:ok, count}
+    case Repo.transaction(multi) do
+      {:ok, results} ->
+        Cache.invalidate_offers()
+        {:ok, map_size(results)}
+
+      {:error, {:offer, idx}, changeset, _changes} ->
+        row_title = rows |> Enum.at(idx) |> Map.get(:title, "?")
+        Logger.warning("[KwikEMart] Import fehlgeschlagen bei '#{row_title}': #{inspect(changeset.errors)}")
+        {:error, changeset}
+    end
+  end
+
+  defp build_offer_attrs(row, valid_from, valid_to) do
+    %{
+      title: row.title,
+      description: row.description,
+      price: parse_decimal(row.price),
+      original_price: parse_decimal(row.original_price),
+      discount_percent: parse_integer(row.discount_percent),
+      image_url: row.image_url,
+      valid_from: valid_from,
+      valid_to: valid_to,
+      category_id: get_category_id_by_slug(row.category_slug)
+    }
   end
 
   defp get_category_id_by_slug(slug) when is_binary(slug) and slug != "" do
     case Repo.get_by(Category, slug: slug, type: "offer") do
       %Category{id: id} -> id
       nil ->
-        Logger.warning("[KwikEMart] ⚠️  Kategorie '#{slug}' nicht gefunden — Angebot ohne Kategorie")
+        Logger.warning("[KwikEMart] Kategorie '#{slug}' nicht gefunden - Angebot ohne Kategorie")
         nil
     end
   end
@@ -195,6 +208,7 @@ defmodule KwikEMart.Offers do
   # Categories
   # ---------------------------------------------------------------------------
 
+  @spec list_categories(String.t()) :: [Category.t()]
   def list_categories(type \\ "offer") do
     Cache.fetch_categories(type, fn ->
       Repo.all(from c in Category, where: c.type == ^type, order_by: c.name)

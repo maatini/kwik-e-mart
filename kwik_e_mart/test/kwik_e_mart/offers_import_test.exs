@@ -35,14 +35,15 @@ defmodule KwikEMart.OffersImportTest do
       assert offer.valid_to == Date.add(today, 6)
     end
 
-    test "überspringt Angebote mit fehlendem Pflichtfeld" do
+    test "schlägt fehl wenn ein Angebot ein Pflichtfeld verletzt (alles-oder-nichts)" do
       path = write_temp_csv("""
       title,description,price,original_price,discount_percent,category_slug,featured,image_url
       ,Kein Titel,1.99,2.99,10,getraenke,false,/images/x.svg
       Duff Beer,OK,3.99,5.49,27,getraenke,true,/images/duff-beer.svg
       """)
 
-      assert {:ok, 1} = Offers.import_weekly_offers(path)
+      assert {:error, _changeset} = Offers.import_weekly_offers(path)
+      assert Offers.list_offers() == []
     end
 
     test "verarbeitet unbekannte Kategorie-Slugs (nil category_id)" do

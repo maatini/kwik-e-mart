@@ -10,7 +10,7 @@ defmodule KwikEMartWeb.HomeLive do
     current_market = market_id && Markets.get_market(market_id)
 
     featured_offers = Offers.list_featured_offers(6)
-    recipes = Recipes.list_recipes() |> Enum.take(3)
+    recipes = Recipes.list_recipes(limit: 3)
 
     {:ok,
      socket

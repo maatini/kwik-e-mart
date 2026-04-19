@@ -5,7 +5,7 @@ defmodule KwikEMart.MixProject do
     [
       app: :kwik_e_mart,
       version: "0.1.0",
-      elixir: "~> 1.14",
+      elixir: "~> 1.18",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
@@ -34,8 +34,7 @@ defmodule KwikEMart.MixProject do
     [
       {:beacon_live_admin, "~> 0.4"},
       {:beacon, "~> 0.5"},
-      {:ex_aws, "~> 2.5", override: true},
-      {:igniter, "~> 0.6", only: [:dev, :test]},
+{:igniter, "~> 0.6", only: [:dev, :test]},
       {:phoenix, "~> 1.7.14"},
       {:phoenix_ecto, "~> 4.5"},
       {:ecto_sql, "~> 3.10"},

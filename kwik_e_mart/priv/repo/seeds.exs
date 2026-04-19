@@ -244,7 +244,7 @@ recipes_data = [
       "1 Stück Ingwer (3cm)", "Garam Masala", "Koriander", "Basmatireis"
     ],
     instructions: "Hähnchen würfeln und anbraten. Zwiebel, Knoblauch und Ingwer anschwitzen. Curry-Paste einrühren, 2 Min. rösten. Tomaten und Kokosmilch zugeben, 20 Min. köcheln. Mit Garam Masala abschmecken. Mit Reis und frischem Koriander servieren.",
-    prep_time: 45, difficulty: "Mittel", servings: 4,
+    prep_time: 45, difficulty: "mittel", servings: 4,
     image_url: "/images/rezept-tikka-masala.svg",
     tags: ["indisch", "hähnchen", "apu", "hauptgericht"],
     seasonal: false,
@@ -259,7 +259,7 @@ recipes_data = [
       "Prise Zimt", "rosa Zuckerglasur zum Garnieren"
     ],
     instructions: "Donuts in Stücke reißen. Eier, Milch, Sahne, Zucker und Vanille verquirlen. Donuts einweichen, 30 Min. ziehen lassen. In gefetteter Form bei 175°C, 35 Min. backen. Warm mit Glasur servieren.",
-    prep_time: 60, difficulty: "Einfach", servings: 6,
+    prep_time: 60, difficulty: "leicht", servings: 6,
     image_url: "/images/rezept-donut-pudding.svg",
     tags: ["dessert", "backen", "homer", "süß"],
     seasonal: false,
@@ -273,7 +273,7 @@ recipes_data = [
       "50ml Kokosmilch", "Toppings: Granola, Kiwi, Erdbeeren, Kokosflocken"
     ],
     instructions: "Gefrorenen Squishee, Banane, Mango und Kokosmilch im Mixer cremig pürieren. In Bowl füllen. Mit Granola, Früchten und Kokosflocken garnieren. Sofort servieren!",
-    prep_time: 10, difficulty: "Einfach", servings: 2,
+    prep_time: 10, difficulty: "leicht", servings: 2,
     image_url: "/images/rezept-smoothie-bowl.svg",
     tags: ["frühstück", "schnell", "vegan", "bunt"],
     seasonal: true,
@@ -288,7 +288,7 @@ recipes_data = [
       "Salz", "Tortilla-Chips zum Servieren"
     ],
     instructions: "Tomaten, Zwiebel und Jalapeños fein würfeln. Knoblauch pressen. Koriander hacken. Alles vermengen, mit Limettensaft und Salz abschmecken. 30 Min. ziehen lassen. Mit Tortilla-Chips servieren.",
-    prep_time: 15, difficulty: "Einfach", servings: 4,
+    prep_time: 15, difficulty: "leicht", servings: 4,
     image_url: "/images/rezept-salsa.svg",
     tags: ["snack", "scharf", "vegan", "schnell"],
     seasonal: false,
@@ -303,7 +303,7 @@ recipes_data = [
       "1 Zwiebel", "3 Knoblauchzehen", "Oregano", "Basilikum"
     ],
     instructions: "Hackfleisch mit Zwiebel und Knoblauch anbraten. Tomatensauce zugeben, 15 Min. köcheln. Ricotta mit Kräutern mischen. Lasagne schichten: Sauce – Nudeln – Ricotta – Mozzarella. Wiederholen. Mit Parmesan abschließen. Bei 180°C, 45 Min. backen.",
-    prep_time: 90, difficulty: "Mittel", servings: 6,
+    prep_time: 90, difficulty: "mittel", servings: 6,
     image_url: "/images/rezept-lasagne.svg",
     tags: ["hauptgericht", "pasta", "marge", "familienrezept"],
     seasonal: false,
@@ -318,7 +318,7 @@ recipes_data = [
       "Paprikapulver", "Burgerbrötchen", "Salat, Tomate, Avocado"
     ],
     instructions: "Kichererbsen grob zerdrücken. Zwiebel und Knoblauch fein hacken, anschwitzen. Mit Erbsen, Haferflocken und Gewürzen zu einer Masse formen. Patties formen, 4 Min. pro Seite braten. Im Brötchen mit Beilagen servieren.",
-    prep_time: 30, difficulty: "Mittel", servings: 4,
+    prep_time: 30, difficulty: "mittel", servings: 4,
     image_url: "/images/rezept-vegan-burger.svg",
     tags: ["vegan", "vegetarisch", "burger", "lisa"],
     seasonal: false,
@@ -332,7 +332,7 @@ recipes_data = [
       "2 EL Zucker", "Prise Kardamom", "Eiswürfel", "Minze zum Garnieren"
     ],
     instructions: "Mango schälen und würfeln. Mit Joghurt, Milch, Zucker und Kardamom im Mixer cremig pürieren. Mit Eiswürfeln in hohe Gläser füllen. Mit Minze garnieren. Sofort servieren.",
-    prep_time: 10, difficulty: "Einfach", servings: 4,
+    prep_time: 10, difficulty: "leicht", servings: 4,
     image_url: "/images/rezept-mango-lassi.svg",
     tags: ["getränk", "indisch", "erfrischend", "schnell"],
     seasonal: true,
@@ -348,7 +348,7 @@ recipes_data = [
       "Saure Sahne, Cheddar zum Servieren"
     ],
     instructions: "Hackfleisch scharf anbraten. Zwiebeln und Knoblauch zugeben. Chipotle, Gewürze und Tomaten einrühren. Bohnen zugeben. 1 Std. auf kleiner Flamme köcheln. Schokolade einrühren. Mit Saurer Sahne und Cheddar servieren.",
-    prep_time: 75, difficulty: "Mittel", servings: 5,
+    prep_time: 75, difficulty: "mittel", servings: 5,
     image_url: "/images/rezept-chili.svg",
     tags: ["hauptgericht", "scharf", "homer", "chili"],
     seasonal: false,

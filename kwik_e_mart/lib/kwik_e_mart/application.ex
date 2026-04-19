@@ -36,6 +36,8 @@ defmodule KwikEMart.Application do
   @impl true
   def config_change(changed, _new, removed) do
     KwikEMartWeb.Endpoint.config_change(changed, removed)
+    KwikEMartWeb.KwikEndpoint.config_change(changed, removed)
+    KwikEMartWeb.ProxyEndpoint.config_change(changed, removed)
     :ok
   end
 end

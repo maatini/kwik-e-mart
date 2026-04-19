@@ -59,9 +59,12 @@ defmodule KwikEMartWeb.OffersLive do
   end
 
   defp valid_range([]), do: nil
-  defp valid_range(offers) do
-    from = offers |> Enum.map(& &1.valid_from) |> Enum.min(Date)
-    to   = offers |> Enum.map(& &1.valid_to)   |> Enum.max(Date)
+  defp valid_range([first | rest]) do
+    {from, to} =
+      Enum.reduce(rest, {first.valid_from, first.valid_to}, fn o, {mn, mx} ->
+        {min(mn, o.valid_from), max(mx, o.valid_to)}
+      end)
+
     "#{Calendar.strftime(from, "%d.%m.%Y")} – #{Calendar.strftime(to, "%d.%m.%Y")}"
   end
 

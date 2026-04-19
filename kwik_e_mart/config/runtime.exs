@@ -72,6 +72,18 @@ if config_env() == :prod do
       You can generate one by calling: mix phx.gen.secret 32
       """
 
+  admin_username =
+    System.get_env("ADMIN_USERNAME") ||
+      raise "environment variable ADMIN_USERNAME is missing."
+
+  admin_password =
+    System.get_env("ADMIN_PASSWORD") ||
+      raise "environment variable ADMIN_PASSWORD is missing."
+
+  config :kwik_e_mart,
+    admin_username: admin_username,
+    admin_password: admin_password
+
   config :kwik_e_mart, :dns_cluster_query, System.get_env("DNS_CLUSTER_QUERY")
 
   config :kwik_e_mart, KwikEMartWeb.Endpoint,
@@ -100,7 +112,8 @@ if config_env() == :prod do
       store: :cookie,
       key: "_kwik_e_mart_key",
       signing_salt: signing_salt,
-      same_site: "Lax"
+      same_site: "Lax",
+      secure: true
     ]
 
   # ## SSL Support
