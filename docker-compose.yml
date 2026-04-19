@@ -1,0 +1,47 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: kwik_e_mart_dev
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: ./kwik_e_mart
+      dockerfile: Dockerfile
+      target: dev
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "4000:4000"
+      - "4590:4590"
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres/kwik_e_mart_dev
+      PHX_SERVER: "true"
+      PHX_HOST: localhost
+      PORT: 4000
+      SECRET_KEY_BASE: "dev_secret_key_base_min_64_chars_replace_in_production_xxxxx"
+      MIX_ENV: dev
+    volumes:
+      - ./kwik_e_mart:/app
+      - mix_deps:/app/deps
+      - mix_build:/app/_build
+    working_dir: /app
+
+volumes:
+  postgres_data:
+  mix_deps:
+  mix_build:

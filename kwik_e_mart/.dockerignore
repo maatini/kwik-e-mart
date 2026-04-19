@@ -1,0 +1,10 @@
+.git
+.gitignore
+deps/
+_build/
+priv/static/assets/
+node_modules/
+assets/node_modules/
+.env
+*.exs.local
+test/
