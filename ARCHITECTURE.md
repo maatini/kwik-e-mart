@@ -187,8 +187,8 @@ KwikEMart.Recipes
 
 | Module | Route | Key Events |
 |--------|-------|-----------|
-| `MarketFinderLive` | `/markt-waehlen` | `search`, `select_market` |
-| `OffersLive` | `/angebote/live` | `filter_category`, `reset_filter` |
+| `MarketFinderLive` | `/markt-waehlen` | `search`, `select_market`, `use_location` |
+| `OffersLive` | `/angebote/live` | `filter_category`, `toggle_superknueller`, `reset_filter` |
 | `RecipesLive` | `/rezepte/live` | `toggle_seasonal`, `filter_category`, `reset_filter` |
 
 ### Beacon CMS Site `:kwik`

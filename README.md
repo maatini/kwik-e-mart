@@ -184,10 +184,11 @@ kwik-e-mart/                      # Repo-Root
 │   │   └── test.exs               # Test-DB
 │   ├── lib/
 │   │   ├── kwik_e_mart/
-│   │   │   ├── application.ex     # Supervision-Tree (3 Endpoints + Beacon)
+│   │   │   ├── application.ex     # Supervision-Tree (3 Endpoints + Beacon + Cache)
+│   │   │   ├── cache.ex           # Cachex-Wrapper (fetch/invalidate)
 │   │   │   ├── markets.ex         # Context: Marktsuche, Geolocation
 │   │   │   ├── markets/market.ex  # Schema
-│   │   │   ├── offers.ex          # Context: Angebote filtern
+│   │   │   ├── offers.ex          # Context: Angebote filtern + CSV-Import
 │   │   │   ├── offers/offer.ex    # Schema
 │   │   │   ├── offers/category.ex # Schema (gemeinsam für Offers + Recipes)
 │   │   │   ├── recipes.ex         # Context: Rezepte filtern
@@ -198,10 +199,14 @@ kwik-e-mart/                      # Repo-Root
 │   │       │   ├── offers_live.ex
 │   │       │   ├── recipes_live.ex
 │   │       │   └── components/    # Header, Footer, OfferCard, RecipeTeaser
+│   │       ├── plugs/
+│   │       │   └── fetch_market.ex # Liest kem_market_id-Cookie in Session
 │   │       ├── endpoint.ex        # Phoenix-Standard-Endpoint (:4100)
 │   │       ├── kwik_endpoint.ex   # Beacon-Endpoint (:4590)
 │   │       ├── proxy_endpoint.ex  # Öffentlicher Proxy (:4000)
 │   │       └── router.ex
+│   ├── lib/mix/tasks/
+│   │   └── kwik_e_mart.import_offers.ex  # mix kwik_e_mart.import_offers
 │   ├── priv/
 │   │   ├── repo/
 │   │   │   ├── migrations/        # 5 Migrations (Beacon + Domains)
@@ -226,10 +231,8 @@ kwik-e-mart/                      # Repo-Root
 
 ```
 markets
-├── id, name, address, city, zip, region
-├── latitude, longitude             # für Geolocation-Suche
-├── phone, email, website
-└── opening_hours (map)
+├── id, name, street, city, zip, region
+└── latitude, longitude             # für Geolocation-Suche
 ```
 
 Wichtige Funktionen:
@@ -244,16 +247,15 @@ categories
 ├── id, name, slug, type ("offer" | "recipe"), icon
 
 offers
-├── id, title, description, original_price, sale_price
-├── image_url, valid_from, valid_until
-├── market_id (FK), category_id (FK)
-└── featured (boolean)
+├── id, title, description, price, original_price, discount_percent
+├── image_url, valid_from, valid_to
+└── market_id (FK), category_id (FK)
 ```
 
 Wichtige Funktionen:
-- `list_current_offers/1` — nur Angebote im Gültigkeitszeitraum
-- `list_featured_offers/0` — Hero-Teaser auf der Startseite
-- `list_offers_by_market/2` — marktspezifische Angebote
+- `list_offers/1` — nur Angebote im Gültigkeitszeitraum, mit Filtern: `market_id`, `category_id`, `superknueller`
+- `list_featured_offers/1` — Angebote mit `discount_percent >= 25` als Hero-Teaser
+- `import_weekly_offers/1` — CSV → DB (NimbleCSV, Datums-Autoberechnung)
 
 ### `KwikEMart.Recipes`
 
@@ -261,7 +263,7 @@ Wichtige Funktionen:
 recipes
 ├── id, title, description, instructions
 ├── ingredients (string[]), tags (string[])
-├── prep_time (Minuten), image_url
+├── prep_time (Minuten), difficulty ("leicht"|"mittel"|"schwer"), servings, image_url
 ├── seasonal (boolean)
 └── category_id (FK)
 ```
@@ -270,6 +272,20 @@ Wichtige Funktionen:
 - `list_seasonal_recipes/0` — aktuelle Saisonrezepte
 - `list_recipes/1` — mit Filtern: `category_id`, `seasonal`, `tag`
 - `list_all_tags/0` — für Tag-Filter-UI
+
+### `KwikEMart.Cache`
+
+Cachex-basierter Caching-Layer (`:kwik_cache`, ETS-backed) mit automatischer Invalidierung:
+
+| Funktion | TTL | Invalidierung |
+|---|---|---|
+| `fetch_offers/2` | 5 min | `create/update/delete_offer`, `import_weekly_offers` |
+| `fetch_featured_offers/2` | 5 min | wie oben |
+| `fetch_recipes/2` | 5 min | `create/update/delete_recipe` |
+| `fetch_tags/1` | 5 min | wie oben |
+| `fetch_categories/2` | 1 h | — |
+
+Im Test-Env deaktiviert (`cache_enabled: false`), um stale-Data zwischen Tests zu verhindern.
 
 ---
 
@@ -285,6 +301,7 @@ Wichtige Funktionen:
 
 - Listet alle aktuell gültigen Angebote
 - Kategorie-Filter via `push_patch` (ohne Seiten-Reload)
+- „Marge's Superknüller"-Toggle (Angebote mit ≥ 30 % Rabatt)
 - Preisformatierung als `XX,XX €`
 
 ### `/rezepte/live` — `RecipesLive`
