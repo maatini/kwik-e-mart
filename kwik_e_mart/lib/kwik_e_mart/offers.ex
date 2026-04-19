@@ -7,6 +7,7 @@ defmodule KwikEMart.Offers do
   def list_offers(opts \\ []) do
     market_id = Keyword.get(opts, :market_id)
     category_id = Keyword.get(opts, :category_id)
+    superknueller = Keyword.get(opts, :superknueller, false)
     today = Date.utc_today()
 
     from(o in Offer,
@@ -16,6 +17,7 @@ defmodule KwikEMart.Offers do
     )
     |> filter_by_market(market_id)
     |> filter_by_category(category_id)
+    |> filter_by_superknueller(superknueller)
     |> Repo.all()
   end
 
@@ -24,6 +26,9 @@ defmodule KwikEMart.Offers do
 
   defp filter_by_category(query, nil), do: query
   defp filter_by_category(query, id), do: where(query, [o], o.category_id == ^id)
+
+  defp filter_by_superknueller(query, false), do: query
+  defp filter_by_superknueller(query, true), do: where(query, [o], o.discount_percent >= 30)
 
   def list_featured_offers(limit \\ 6) do
     today = Date.utc_today()

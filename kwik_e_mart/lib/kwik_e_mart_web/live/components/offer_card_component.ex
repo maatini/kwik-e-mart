@@ -8,7 +8,7 @@ defmodule KwikEMartWeb.OfferCardComponent do
     <div class="offer-card">
       <div class="relative bg-gray-50 h-40 flex items-center justify-center">
         <%= if @offer.discount_percent && @offer.discount_percent >= 30 do %>
-          <div class="offer-card-badge-superknueller">Superknüller</div>
+          <div class="offer-card-badge-superknueller">Marge's Superknüller</div>
         <% end %>
         <%= if @offer.discount_percent do %>
           <div class="offer-card-badge-discount">
@@ -35,6 +35,9 @@ defmodule KwikEMartWeb.OfferCardComponent do
         <p class="text-xs text-gray-400 mt-1">
           gültig bis <%= format_date(@offer.valid_to) %>
         </p>
+        <a href="/angebote/live" class="text-xs font-semibold text-kem-green hover:underline mt-1 inline-block">
+          Mehr erfahren →
+        </a>
       </div>
     </div>
     """

@@ -14,6 +14,7 @@ defmodule KwikEMartWeb.RecipesLive do
      |> assign(:recipes, recipes)
      |> assign(:selected_category, nil)
      |> assign(:show_seasonal_only, false)
+     |> assign(:nav_active, :rezepte)
      |> assign(:page_title, "Rezepte & Inspiration – Kwik-E-Mart")}
   end
 

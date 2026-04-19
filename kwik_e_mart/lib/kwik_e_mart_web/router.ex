@@ -15,6 +15,7 @@ defmodule KwikEMartWeb.Router do
     plug :put_root_layout, html: {KwikEMartWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug KwikEMartWeb.Plugs.FetchMarket
   end
 
   pipeline :api do

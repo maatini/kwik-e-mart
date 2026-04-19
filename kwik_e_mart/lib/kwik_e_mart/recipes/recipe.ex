@@ -10,6 +10,8 @@ defmodule KwikEMart.Recipes.Recipe do
     field :ingredients, {:array, :string}, default: []
     field :instructions, :string
     field :prep_time, :integer
+    field :difficulty, :string
+    field :servings, :integer
     field :image_url, :string
     field :tags, {:array, :string}, default: []
     field :seasonal, :boolean, default: false
@@ -20,7 +22,7 @@ defmodule KwikEMart.Recipes.Recipe do
   end
 
   @required [:title]
-  @optional [:description, :ingredients, :instructions, :prep_time, :image_url, :tags, :seasonal, :category_id]
+  @optional [:description, :ingredients, :instructions, :prep_time, :difficulty, :servings, :image_url, :tags, :seasonal, :category_id]
 
   def changeset(recipe, attrs) do
     recipe

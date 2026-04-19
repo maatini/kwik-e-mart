@@ -13,13 +13,17 @@ defmodule KwikEMartWeb.MarketFinderLive do
      |> assign(:query, "")
      |> assign(:results, [])
      |> assign(:current_market, current_market)
+     |> assign(:nav_active, :markt)
      |> assign(:page_title, "Markt wählen – Kwik-E-Mart")}
   end
 
   @impl true
   def handle_event("search", %{"query" => query}, socket) do
     results = Markets.search_markets(query)
-    {:noreply, assign(socket, query: query, results: results)}
+    {:noreply,
+     socket
+     |> assign(query: query, results: results)
+     |> push_event("update_map", %{markets: map_data(results)})}
   end
 
   @impl true
@@ -38,7 +42,18 @@ defmodule KwikEMartWeb.MarketFinderLive do
   @impl true
   def handle_event("use_location", %{"lat" => lat, "lng" => lng}, socket) do
     nearby = Markets.find_nearby_markets(lat, lng)
-    {:noreply, assign(socket, results: nearby)}
+    {:noreply,
+     socket
+     |> assign(results: nearby)
+     |> push_event("update_map", %{markets: map_data(nearby)})}
+  end
+
+  def handle_event("use_location", _params, socket), do: {:noreply, socket}
+
+  defp map_data(markets) do
+    Enum.map(markets, fn m ->
+      %{name: m.name, street: m.street, city: m.city, lat: m.latitude, lng: m.longitude}
+    end)
   end
 
   @impl true
@@ -60,7 +75,7 @@ defmodule KwikEMartWeb.MarketFinderLive do
       <%= if @current_market do %>
         <div class="bg-kem-green/5 border border-kem-green rounded-2xl p-5 mb-6 flex items-center justify-between">
           <div>
-            <p class="text-xs font-bold text-kem-green uppercase tracking-wide mb-1">Dein Markt</p>
+            <p class="text-xs font-bold text-kem-green uppercase tracking-wide mb-1">❤️ Dein Lieblingsmarkt</p>
             <p class="font-bold text-gray-900 text-lg"><%= @current_market.name %></p>
             <p class="text-sm text-gray-600">
               <%= @current_market.street %>, <%= @current_market.zip %> <%= @current_market.city %>
@@ -104,6 +119,14 @@ defmodule KwikEMartWeb.MarketFinderLive do
           />
         </div>
       </form>
+
+      <%!-- Map --%>
+      <div
+        id="market-map"
+        phx-hook="LeafletMap"
+        phx-update="ignore"
+        class="w-full h-64 rounded-2xl overflow-hidden border border-gray-200 mb-6"
+      ></div>
 
       <%!-- Results --%>
       <div class="space-y-3">

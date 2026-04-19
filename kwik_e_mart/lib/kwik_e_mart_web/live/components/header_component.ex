@@ -2,6 +2,7 @@ defmodule KwikEMartWeb.HeaderComponent do
   use KwikEMartWeb, :html
 
   attr :current_market, :map, default: nil
+  attr :nav_active, :atom, default: nil
 
   def kem_nav(assigns) do
     ~H"""
@@ -37,10 +38,10 @@ defmodule KwikEMartWeb.HeaderComponent do
           </.link>
 
           <nav class="hidden md:flex items-center gap-6">
-            <.link navigate="/markt-waehlen" class="kem-nav-link">Angebote</.link>
-            <.link navigate="/rezepte/live" class="kem-nav-link">Rezepte</.link>
-            <.link navigate="/" class="kem-nav-link">Region</.link>
-            <.link navigate="/" class="kem-nav-link">Mehr erfahren</.link>
+            <.link navigate="/angebote/live" class={nav_link_class(@nav_active, :angebote)}>Angebote</.link>
+            <.link navigate="/rezepte/live"  class={nav_link_class(@nav_active, :rezepte)}>Rezepte</.link>
+            <.link navigate="/markt-waehlen" class={nav_link_class(@nav_active, :markt)}>Märkte</.link>
+            <.link navigate="/"              class={nav_link_class(@nav_active, :mehr)}>Mehr erfahren</.link>
           </nav>
         </div>
 
@@ -71,4 +72,7 @@ defmodule KwikEMartWeb.HeaderComponent do
     </header>
     """
   end
+
+  defp nav_link_class(active, key) when active == key, do: "kem-nav-link kem-nav-link-active"
+  defp nav_link_class(_active, _key), do: "kem-nav-link"
 end

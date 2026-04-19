@@ -215,15 +215,38 @@ page_template = ~S"""
 </div>
 
 <%!-- =====================================================
-     AKTUELLE ANGEBOTE
+     DEIN LIEBLINGSMARKT (prominent, direkt unter Hero)
+     ===================================================== --%>
+<section class="bg-[#00A651] py-10 lg:py-14">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-8">
+      <div class="text-center md:text-left">
+        <p class="text-[#FFED00] font-bold uppercase tracking-widest text-xs mb-2">Persönlich für dich</p>
+        <h2 class="text-white text-3xl lg:text-4xl font-black leading-tight mb-3">
+          DEIN LIEBLINGSMARKT
+        </h2>
+        <p class="text-white/80 text-base lg:text-lg max-w-lg">
+          Speichere deinen Lieblings-Kwik-E-Mart und sieh sofort
+          die Angebote für Springfield – ganz persönlich für dich.
+        </p>
+      </div>
+      <a href="/markt-waehlen" class="btn-primary shrink-0 text-base lg:text-lg px-8 py-4 whitespace-nowrap">
+        📍 MARKT WÄHLEN
+      </a>
+    </div>
+  </div>
+</section>
+
+<%!-- =====================================================
+     ANGEBOTE DER WOCHE
      ===================================================== --%>
 <section class="kem-section bg-white">
   <div class="kem-section-inner">
 
     <div class="kem-section-header">
       <div>
-        <h2 class="kem-section-title">Aktuelle Angebote</h2>
-        <p class="kem-section-subtitle">Gültig diese Woche in Ihrem Kwik-E-Mart</p>
+        <h2 class="kem-section-title">Angebote der Woche</h2>
+        <p class="kem-section-subtitle">Gültig 19.04.2026 – 03.05.2026 · Nur in teilnehmenden Märkten</p>
       </div>
       <a href="/angebote/live" class="kem-section-link">Alle Angebote →</a>
     </div>
@@ -234,7 +257,7 @@ page_template = ~S"""
         <div class="offer-card-image bg-yellow-50">
           <div class="text-6xl">🥤</div>
           <div class="offer-card-badge-discount">-34%</div>
-          <div class="offer-card-badge-label">Top</div>
+          <div class="offer-card-badge-label">Marge's Superknüller</div>
         </div>
         <div class="offer-card-body">
           <p class="offer-card-title">Squishee Tropical 0,5l</p>
@@ -265,7 +288,7 @@ page_template = ~S"""
         <div class="offer-card-image bg-red-50">
           <div class="text-6xl">🥣</div>
           <div class="offer-card-badge-discount">-38%</div>
-          <div class="offer-card-badge-label">Bestseller</div>
+          <div class="offer-card-badge-label">Marge's Superknüller</div>
         </div>
         <div class="offer-card-body">
           <p class="offer-card-title">Krusty-O's Cerealien 500g</p>
@@ -296,6 +319,7 @@ page_template = ~S"""
         <div class="offer-card-image bg-pink-50">
           <div class="text-6xl">🍩</div>
           <div class="offer-card-badge-discount">-33%</div>
+          <div class="offer-card-badge-label">Marge's Superknüller</div>
         </div>
         <div class="offer-card-body">
           <p class="offer-card-title">Springfield Donuts 6 Stück</p>
@@ -333,25 +357,102 @@ page_template = ~S"""
 </section>
 
 <%!-- =====================================================
-     MARKT-BANNER
+     REZEPT-INSPIRATION
      ===================================================== --%>
-<div class="kem-market-banner">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex flex-col md:flex-row items-center justify-between gap-6 py-2">
+<section class="kem-section bg-gray-50">
+  <div class="kem-section-inner">
+
+    <div class="kem-section-header">
       <div>
-        <p class="text-kem-yellow font-bold uppercase tracking-widest text-xs mb-1">Persönlich für Sie</p>
-        <h3 class="text-white text-2xl font-black">Ihren Kwik-E-Mart finden</h3>
-        <p class="text-gray-400 text-sm mt-1">Aktuelle Angebote, Öffnungszeiten und mehr – direkt für Ihre Filiale.</p>
+        <h2 class="kem-section-title">Auf der Suche nach Rezept-Inspiration?</h2>
+        <p class="kem-section-subtitle">Gekocht von Apu, Homer, Marge, Bart und Lisa</p>
       </div>
-      <a href="/markt-waehlen" class="btn-primary shrink-0">
-        📍 Markt wählen
-      </a>
+      <a href="/rezepte/live" class="kem-section-link">Alle Rezepte →</a>
     </div>
+
+    <div class="recipe-grid">
+
+      <div class="recipe-card group">
+        <div class="recipe-card-image bg-orange-100">
+          <div class="flex items-center justify-center h-full text-7xl">🍛</div>
+          <span class="recipe-card-seasonal">🌟 Apu's Klassiker</span>
+        </div>
+        <div class="recipe-card-body">
+          <p class="recipe-card-category">Apu's Küche · Indisch</p>
+          <h3 class="recipe-card-title">Apu's Chicken Tikka Masala</h3>
+          <div class="recipe-card-meta">
+            <span>⏱ 45 Min.</span>
+            <span>·</span>
+            <span>Hauptgericht</span>
+            <span>·</span>
+            <span>4 Portionen</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe-card group">
+        <div class="recipe-card-image bg-pink-100">
+          <div class="flex items-center justify-center h-full text-7xl">🍩</div>
+        </div>
+        <div class="recipe-card-body">
+          <p class="recipe-card-category">Homer's Favourites · Dessert</p>
+          <h3 class="recipe-card-title">Homer's Donut Bread Pudding</h3>
+          <div class="recipe-card-meta">
+            <span>⏱ 60 Min.</span>
+            <span>·</span>
+            <span>Süßspeise</span>
+            <span>·</span>
+            <span>6 Portionen</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe-card group">
+        <div class="recipe-card-image bg-green-100">
+          <div class="flex items-center justify-center h-full text-7xl">🥤</div>
+          <span class="recipe-card-seasonal">☀️ Saisonal</span>
+        </div>
+        <div class="recipe-card-body">
+          <p class="recipe-card-category">Schnell &amp; Einfach · Frühstück</p>
+          <h3 class="recipe-card-title">Squishee Smoothie Bowl</h3>
+          <div class="recipe-card-meta">
+            <span>⏱ 10 Min.</span>
+            <span>·</span>
+            <span>Vegan</span>
+            <span>·</span>
+            <span>2 Portionen</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe-card group">
+        <div class="recipe-card-image bg-red-100">
+          <div class="flex items-center justify-center h-full text-7xl">🌶️</div>
+        </div>
+        <div class="recipe-card-body">
+          <p class="recipe-card-category">Homer's Favourites · Hauptgericht</p>
+          <h3 class="recipe-card-title">Homer's Chili con Carne</h3>
+          <div class="recipe-card-meta">
+            <span>⏱ 75 Min.</span>
+            <span>·</span>
+            <span>Scharf</span>
+            <span>·</span>
+            <span>5 Portionen</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="text-center mt-8">
+      <a href="/rezepte/live" class="btn-outline-green">Alle Rezepte ansehen</a>
+    </div>
+
   </div>
-</div>
+</section>
 
 <%!-- =====================================================
-     SAISONALER TEASER (Vollbild-Banner)
+     SAISONALER TEASER (Apu's Tipp)
      ===================================================== --%>
 <section class="kem-section bg-[#FFED00]">
   <div class="kem-section-inner">
@@ -377,78 +478,6 @@ page_template = ~S"""
       </div>
 
     </div>
-  </div>
-</section>
-
-<%!-- =====================================================
-     REZEPTE
-     ===================================================== --%>
-<section class="kem-section bg-white">
-  <div class="kem-section-inner">
-
-    <div class="kem-section-header">
-      <div>
-        <h2 class="kem-section-title">Rezepte aus Springfield</h2>
-        <p class="kem-section-subtitle">Gekocht von Apu, Homer, Marge, Bart und Lisa</p>
-      </div>
-      <a href="/rezepte/live" class="kem-section-link">Alle Rezepte →</a>
-    </div>
-
-    <div class="recipe-grid">
-
-      <div class="recipe-card group">
-        <div class="recipe-card-image bg-orange-100">
-          <div class="flex items-center justify-center h-full text-7xl">🍛</div>
-          <span class="recipe-card-seasonal">🌟 Apu's Klassiker</span>
-        </div>
-        <div class="recipe-card-body">
-          <p class="recipe-card-category">Apu's Küche · Indisch</p>
-          <h3 class="recipe-card-title">Apu's Chicken Tikka Masala</h3>
-          <div class="recipe-card-meta">
-            <span>⏱ 45 Min.</span>
-            <span>·</span>
-            <span>Hauptgericht</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="recipe-card group">
-        <div class="recipe-card-image bg-pink-100">
-          <div class="flex items-center justify-center h-full text-7xl">🍩</div>
-        </div>
-        <div class="recipe-card-body">
-          <p class="recipe-card-category">Homer's Favourites · Dessert</p>
-          <h3 class="recipe-card-title">Homer's Donut Bread Pudding</h3>
-          <div class="recipe-card-meta">
-            <span>⏱ 60 Min.</span>
-            <span>·</span>
-            <span>Süßspeise</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="recipe-card group">
-        <div class="recipe-card-image bg-green-100">
-          <div class="flex items-center justify-center h-full text-7xl">🥤</div>
-          <span class="recipe-card-seasonal">☀️ Saisonal</span>
-        </div>
-        <div class="recipe-card-body">
-          <p class="recipe-card-category">Schnell &amp; Einfach · Frühstück</p>
-          <h3 class="recipe-card-title">Squishee Smoothie Bowl</h3>
-          <div class="recipe-card-meta">
-            <span>⏱ 10 Min.</span>
-            <span>·</span>
-            <span>Vegan</span>
-          </div>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="text-center mt-8 md:hidden">
-      <a href="/rezepte/live" class="btn-outline-green">Alle Rezepte ansehen</a>
-    </div>
-
   </div>
 </section>
 
@@ -505,6 +534,51 @@ page_template = ~S"""
 
     </div>
 
+  </div>
+</section>
+
+<%!-- =====================================================
+     NEWSLETTER-TEASER
+     ===================================================== --%>
+<section class="bg-[#1a1a1a] py-14">
+  <div class="max-w-2xl mx-auto px-4 text-center">
+    <p class="text-[#FFED00] text-xs font-bold uppercase tracking-widest mb-3">Newsletter</p>
+    <h2 class="text-white text-3xl font-black mb-3">Kwik-E-Mart News</h2>
+    <p class="text-gray-400 mb-8">
+      Jetzt abonnieren und Duff-Beer-Rezepte, Wochenangebote
+      und Apu's Weisheiten direkt ins Postfach!
+    </p>
+    <div class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+      <input
+        type="email"
+        placeholder="Deine E-Mail-Adresse"
+        class="flex-1 px-5 py-3 rounded-full text-gray-900 text-sm border-0 focus:ring-2 focus:ring-kem-green"
+      />
+      <button type="button" class="btn-primary whitespace-nowrap">Abonnieren →</button>
+    </div>
+    <p class="text-xs text-gray-600 mt-4">Marge weiß Bescheid – wir schützen deine Daten.</p>
+  </div>
+</section>
+
+<%!-- =====================================================
+     GEWINNSPIEL-BANNER
+     ===================================================== --%>
+<section class="bg-[#FFED00] py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row items-center gap-8">
+      <div class="text-7xl shrink-0">🍩</div>
+      <div class="flex-1 text-center md:text-left">
+        <p class="text-[#E3001B] font-bold uppercase tracking-widest text-xs mb-2">Gewinnspiel</p>
+        <h2 class="text-[#1a1a1a] text-3xl font-black mb-2">
+          Gewinne Homer's Lieblings-Doughnuts!
+        </h2>
+        <p class="text-gray-700 mb-4 max-w-lg">
+          Kaufe für mind. 10 € ein und nimm an der wöchentlichen Verlosung teil.
+          Der Gewinner erhält ein Jahr lang gratis Donuts vom Springfield Bakery!
+        </p>
+        <a href="#" class="btn-outline-green">Jetzt mitmachen →</a>
+      </div>
+    </div>
   </div>
 </section>
 
