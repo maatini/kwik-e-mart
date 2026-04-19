@@ -14,6 +14,8 @@
 
 Ein technisches Referenzprojekt für einen modernen Supermarkt-Webshop im Simpsons-Stil — gebaut mit **Elixir**, **Phoenix LiveView** und **Beacon CMS**.
 
+→ Detaillierte Architektur-Dokumentation: **[ARCHITECTURE.md](ARCHITECTURE.md)**
+
 ---
 
 ## Inhalt
