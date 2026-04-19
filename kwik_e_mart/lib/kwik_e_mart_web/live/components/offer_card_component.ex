@@ -1,5 +1,6 @@
 defmodule KwikEMartWeb.OfferCardComponent do
   use KwikEMartWeb, :html
+  import KwikEMartWeb.PriceHelpers
 
   attr :offer, :map, required: true
 
@@ -41,15 +42,6 @@ defmodule KwikEMartWeb.OfferCardComponent do
       </div>
     </div>
     """
-  end
-
-  defp format_price(nil), do: ""
-  defp format_price(%Decimal{} = price) do
-    price
-    |> Decimal.round(2)
-    |> Decimal.to_string(:normal)
-    |> String.replace(".", ",")
-    |> Kernel.<>(" €")
   end
 
   defp format_date(%Date{} = date) do

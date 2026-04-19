@@ -2,6 +2,7 @@ defmodule KwikEMartWeb.OffersLive do
   use KwikEMartWeb, :live_view
 
   alias KwikEMart.{Offers, Markets}
+  import KwikEMartWeb.PriceHelpers
 
   @impl true
   def mount(_params, session, socket) do
@@ -54,12 +55,6 @@ defmodule KwikEMartWeb.OffersLive do
 
   def handle_event("reset_filter", _params, socket) do
     {:noreply, push_patch(socket, to: ~p"/angebote/live")}
-  end
-
-  defp format_price(nil), do: ""
-  defp format_price(price) do
-    rounded = price |> Decimal.round(2) |> Decimal.to_string() |> String.replace(".", ",")
-    "#{rounded} \u20AC"
   end
 
   defp valid_range([]), do: nil

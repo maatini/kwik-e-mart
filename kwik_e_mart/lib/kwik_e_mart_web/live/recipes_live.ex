@@ -1,11 +1,11 @@
 defmodule KwikEMartWeb.RecipesLive do
   use KwikEMartWeb, :live_view
 
-  alias KwikEMart.{Recipes, Offers}
+  alias KwikEMart.Recipes
 
   @impl true
   def mount(_params, _session, socket) do
-    categories = Offers.list_categories("recipe")
+    categories = Recipes.list_categories()
 
     {:ok,
      socket

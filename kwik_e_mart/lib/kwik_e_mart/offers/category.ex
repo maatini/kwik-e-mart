@@ -3,7 +3,6 @@ defmodule KwikEMart.Offers.Category do
   import Ecto.Changeset
 
   alias KwikEMart.Offers.Offer
-  alias KwikEMart.Recipes.Recipe
 
   schema "categories" do
     field :name, :string
@@ -12,7 +11,6 @@ defmodule KwikEMart.Offers.Category do
     field :icon, :string
 
     has_many :offers, Offer
-    has_many :recipes, Recipe
 
     timestamps(type: :utc_datetime)
   end

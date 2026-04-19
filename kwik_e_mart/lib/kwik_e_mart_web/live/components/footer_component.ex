@@ -23,17 +23,17 @@ defmodule KwikEMartWeb.FooterComponent do
           <div>
             <h4 class="text-white font-semibold mb-3">Über Kwik-E-Mart</h4>
             <ul class="space-y-2 text-sm text-gray-400">
-              <li><span class="hover:text-white transition-colors cursor-pointer">Unternehmen</span></li>
-              <li><span class="hover:text-white transition-colors cursor-pointer">Karriere</span></li>
-              <li><span class="hover:text-white transition-colors cursor-pointer">Presse</span></li>
+              <li>Unternehmen</li>
+              <li>Karriere</li>
+              <li>Presse</li>
             </ul>
           </div>
           <div>
             <h4 class="text-white font-semibold mb-3">Service</h4>
             <ul class="space-y-2 text-sm text-gray-400">
-              <li><span class="hover:text-white transition-colors cursor-pointer">Kundenservice</span></li>
-              <li><span class="hover:text-white transition-colors cursor-pointer">Datenschutz</span></li>
-              <li><span class="hover:text-white transition-colors cursor-pointer">Impressum</span></li>
+              <li>Kundenservice</li>
+              <li>Datenschutz</li>
+              <li>Impressum</li>
             </ul>
           </div>
         </div>

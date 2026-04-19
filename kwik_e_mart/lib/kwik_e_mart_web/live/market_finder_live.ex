@@ -54,7 +54,9 @@ defmodule KwikEMartWeb.MarketFinderLive do
      |> push_event("update_map", %{markets: map_data(nearby)})}
   end
 
-  def handle_event("use_location", _params, socket), do: {:noreply, socket}
+  def handle_event("use_location", _params, socket) do
+    {:noreply, put_flash(socket, :error, "Standort konnte nicht ermittelt werden.")}
+  end
 
   defp map_data(markets) do
     Enum.map(markets, fn m ->

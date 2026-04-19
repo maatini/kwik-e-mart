@@ -1,7 +1,7 @@
 defmodule KwikEMart.Recipes do
   import Ecto.Query
 
-  alias KwikEMart.{Repo, Cache}
+  alias KwikEMart.{Repo, Cache, Offers}
   alias KwikEMart.Recipes.Recipe
 
   def list_recipes(opts \\ []) do
@@ -13,7 +13,7 @@ defmodule KwikEMart.Recipes do
     seasonal = Keyword.get(opts, :seasonal)
     tag = Keyword.get(opts, :tag)
 
-    from(r in Recipe, preload: [:category], order_by: [desc: r.inserted_at])
+    from(r in Recipe, preload: [:category], order_by: [asc: r.title])
     |> filter_by_category(category_id)
     |> filter_by_seasonal(seasonal)
     |> filter_by_tag(tag)
@@ -52,6 +52,8 @@ defmodule KwikEMart.Recipes do
   def list_seasonal_recipes do
     list_recipes(seasonal: true)
   end
+
+  def list_categories, do: Offers.list_categories("recipe")
 
   def list_all_tags do
     Cache.fetch_tags(fn ->
