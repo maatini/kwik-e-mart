@@ -1,6 +1,9 @@
 defmodule Mix.Tasks.KwikEMart.ImportOffers do
   use Mix.Task
 
+  # Mix.Task behaviour and Mix.Task.run/1, Mix.shell/0 are not in the Dialyzer PLT
+  @dialyzer [:no_missing_calls, :no_behaviours, {:nowarn_function, run: 1}]
+
   @shortdoc "Importiert Wochenangebote aus einer CSV-Datei"
 
   @moduledoc """
