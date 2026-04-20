@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [main]
 
+defaults:
+  run:
+    working-directory: kwik_e_mart
+
 jobs:
   format:
     runs-on: ubuntu-latest
@@ -64,6 +68,10 @@ jobs:
           otp-version: '27'
       - run: mix deps.get
       - run: mix test
+        env:
+          MIX_ENV: test
+          PGHOST: localhost
+          PGPASSWORD: postgres
 
   security:
     runs-on: ubuntu-latest
