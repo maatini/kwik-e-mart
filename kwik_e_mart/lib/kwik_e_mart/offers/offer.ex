@@ -5,6 +5,8 @@ defmodule KwikEMart.Offers.Offer do
   alias KwikEMart.Markets.Market
   alias KwikEMart.Offers.Category
 
+  @type t :: %__MODULE__{}
+
   schema "offers" do
     field :title, :string
     field :description, :string

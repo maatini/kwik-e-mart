@@ -23,6 +23,8 @@ defmodule KwikEMart.Cache do
   def invalidate_offers, do: invalidate_prefix(:offers)
   def invalidate_recipes, do: invalidate_prefix(:recipes)
 
+  # Cachex.fetch/3 returns {:loaded, value} on cache miss — not reflected in type specs
+  @dialyzer {:nowarn_function, fetch: 3}
   defp fetch(key, ttl, fun) do
     if Application.get_env(:kwik_e_mart, :cache_enabled, true) do
       case Cachex.fetch(@cache, key, fn -> {:commit, fun.(), [ttl: ttl]} end) do

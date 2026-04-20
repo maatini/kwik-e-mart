@@ -41,6 +41,13 @@ jobs:
         with:
           elixir-version: '1.18'
           otp-version: '27'
+      - uses: actions/cache@v4
+        with:
+          path: |
+            kwik_e_mart/_build/dev/*.plt
+            kwik_e_mart/_build/dev/*.plt.hash
+          key: dialyzer-${{ runner.os }}-otp27-elixir1.18-${{ hashFiles('kwik_e_mart/mix.lock') }}
+          restore-keys: dialyzer-${{ runner.os }}-otp27-elixir1.18-
       - run: mix deps.get
       - run: mix dialyzer
 
