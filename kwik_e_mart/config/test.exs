@@ -16,8 +16,11 @@ config :beacon,
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :kwik_e_mart, KwikEMart.Repo,
-  username: "postgres",
-  socket_dir: System.get_env("PGHOST", "/tmp"),
+  url:
+    System.get_env(
+      "TEST_DATABASE_URL",
+      "postgres://postgres:postgres@localhost:5433/kwik_e_mart_test"
+    ),
   database: "kwik_e_mart_test#{System.get_env("MIX_TEST_PARTITION")}",
   pool: Ecto.Adapters.SQL.Sandbox,
   pool_size: System.schedulers_online() * 2

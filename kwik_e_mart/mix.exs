@@ -65,7 +65,8 @@ defmodule KwikEMart.MixProject do
       {:quantum, "~> 3.5"},
       {:cachex, "~> 3.6"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
+      {:mix_audit, "~> 2.1", only: [:dev, :test], runtime: false}
     ]
   end
 
