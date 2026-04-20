@@ -19,7 +19,8 @@ config :kwik_e_mart,
 # Configure your database
 # Nutzt DATABASE_URL wenn gesetzt (Docker), sonst direkte TCP-Verbindung
 config :kwik_e_mart, KwikEMart.Repo,
-  url: System.get_env("DATABASE_URL", "postgres://postgres:postgres@localhost:5433/kwik_e_mart_dev"),
+  url:
+    System.get_env("DATABASE_URL", "postgres://postgres:postgres@localhost:5433/kwik_e_mart_dev"),
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10

@@ -10,11 +10,12 @@ defmodule KwikEMart.OffersImportTest do
 
   describe "import_weekly_offers/1" do
     test "importiert Angebote aus einer CSV-Datei", %{category: _cat} do
-      path = write_temp_csv("""
-      title,description,price,original_price,discount_percent,category_slug,featured,image_url
-      Duff Beer 6er-Pack,Homer's Lieblingsgetränk,3.99,5.49,27,getraenke,true,/images/duff-beer.svg
-      Buzz Cola 1.5l,Kalt und spritzig,0.99,1.49,34,getraenke,false,/images/buzz-cola.svg
-      """)
+      path =
+        write_temp_csv("""
+        title,description,price,original_price,discount_percent,category_slug,featured,image_url
+        Duff Beer 6er-Pack,Homer's Lieblingsgetränk,3.99,5.49,27,getraenke,true,/images/duff-beer.svg
+        Buzz Cola 1.5l,Kalt und spritzig,0.99,1.49,34,getraenke,false,/images/buzz-cola.svg
+        """)
 
       assert {:ok, 2} = Offers.import_weekly_offers(path)
       offers = Offers.list_offers()
@@ -23,10 +24,11 @@ defmodule KwikEMart.OffersImportTest do
     end
 
     test "setzt valid_from auf heute und valid_to auf heute + 6" do
-      path = write_temp_csv("""
-      title,description,price,original_price,discount_percent,category_slug,featured,image_url
-      Squishee,Tropical,0.79,1.29,39,getraenke,false,/images/squishee.svg
-      """)
+      path =
+        write_temp_csv("""
+        title,description,price,original_price,discount_percent,category_slug,featured,image_url
+        Squishee,Tropical,0.79,1.29,39,getraenke,false,/images/squishee.svg
+        """)
 
       assert {:ok, 1} = Offers.import_weekly_offers(path)
       [offer] = Offers.list_offers()
@@ -36,21 +38,23 @@ defmodule KwikEMart.OffersImportTest do
     end
 
     test "schlägt fehl wenn ein Angebot ein Pflichtfeld verletzt (alles-oder-nichts)" do
-      path = write_temp_csv("""
-      title,description,price,original_price,discount_percent,category_slug,featured,image_url
-      ,Kein Titel,1.99,2.99,10,getraenke,false,/images/x.svg
-      Duff Beer,OK,3.99,5.49,27,getraenke,true,/images/duff-beer.svg
-      """)
+      path =
+        write_temp_csv("""
+        title,description,price,original_price,discount_percent,category_slug,featured,image_url
+        ,Kein Titel,1.99,2.99,10,getraenke,false,/images/x.svg
+        Duff Beer,OK,3.99,5.49,27,getraenke,true,/images/duff-beer.svg
+        """)
 
       assert {:error, _changeset} = Offers.import_weekly_offers(path)
       assert Offers.list_offers() == []
     end
 
     test "verarbeitet unbekannte Kategorie-Slugs (nil category_id)" do
-      path = write_temp_csv("""
-      title,description,price,original_price,discount_percent,category_slug,featured,image_url
-      Krusty-Burger,Springfield-Klassiker,2.49,3.29,24,unknown-slug,false,/images/x.svg
-      """)
+      path =
+        write_temp_csv("""
+        title,description,price,original_price,discount_percent,category_slug,featured,image_url
+        Krusty-Burger,Springfield-Klassiker,2.49,3.29,24,unknown-slug,false,/images/x.svg
+        """)
 
       assert {:ok, 1} = Offers.import_weekly_offers(path)
       [offer] = Offers.list_offers()
@@ -62,7 +66,11 @@ defmodule KwikEMart.OffersImportTest do
     end
 
     test "gibt {:ok, 0} bei leerer CSV zurück" do
-      path = write_temp_csv("title,description,price,original_price,discount_percent,category_slug,featured,image_url\n")
+      path =
+        write_temp_csv(
+          "title,description,price,original_price,discount_percent,category_slug,featured,image_url\n"
+        )
+
       assert {:ok, 0} = Offers.import_weekly_offers(path)
     end
   end

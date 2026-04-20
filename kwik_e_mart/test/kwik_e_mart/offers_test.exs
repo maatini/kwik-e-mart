@@ -38,6 +38,7 @@ defmodule KwikEMart.OffersTest do
     test "filtert nach superknueller (discount >= 30%)", %{market: market} do
       {:ok, _big} =
         Offers.create_offer(Map.put(offer_attrs(market.id), :discount_percent, 35))
+
       {:ok, _small} =
         Offers.create_offer(Map.put(offer_attrs(market.id), :discount_percent, 15))
 
@@ -122,6 +123,7 @@ defmodule KwikEMart.OffersTest do
     test "gibt nur Angebote mit >= 25% Rabatt zurück", %{market: market} do
       {:ok, _featured} =
         Offers.create_offer(Map.put(offer_attrs(market.id), :discount_percent, 30))
+
       {:ok, _normal} =
         Offers.create_offer(Map.put(offer_attrs(market.id), :discount_percent, 10))
 

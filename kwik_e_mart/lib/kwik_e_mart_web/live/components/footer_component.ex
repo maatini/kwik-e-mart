@@ -15,9 +15,21 @@ defmodule KwikEMartWeb.FooterComponent do
           <div>
             <h4 class="text-white font-semibold mb-3">Einkaufen</h4>
             <ul class="space-y-2 text-sm text-gray-400">
-              <li><.link navigate="/angebote/live" class="hover:text-white transition-colors">Angebote</.link></li>
-              <li><.link navigate="/rezepte/live" class="hover:text-white transition-colors">Rezepte</.link></li>
-              <li><.link navigate="/markt-waehlen" class="hover:text-white transition-colors">Markt finden</.link></li>
+              <li>
+                <.link navigate="/angebote/live" class="hover:text-white transition-colors">
+                  Angebote
+                </.link>
+              </li>
+              <li>
+                <.link navigate="/rezepte/live" class="hover:text-white transition-colors">
+                  Rezepte
+                </.link>
+              </li>
+              <li>
+                <.link navigate="/markt-waehlen" class="hover:text-white transition-colors">
+                  Markt finden
+                </.link>
+              </li>
             </ul>
           </div>
           <div>
@@ -40,9 +52,27 @@ defmodule KwikEMartWeb.FooterComponent do
         <div class="border-t border-gray-700 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p class="text-gray-500 text-xs">© 2026 Kwik-E-Mart, Springfield</p>
           <div class="flex items-center gap-4">
-            <a href="#" title="Facebook" class="text-gray-500 hover:text-kem-yellow transition-colors text-lg">Facebook</a>
-            <a href="#" title="Instagram" class="text-gray-500 hover:text-kem-yellow transition-colors text-lg">Instagram</a>
-            <a href="#" title="YouTube" class="text-gray-500 hover:text-kem-yellow transition-colors text-lg">YouTube</a>
+            <a
+              href="#"
+              title="Facebook"
+              class="text-gray-500 hover:text-kem-yellow transition-colors text-lg"
+            >
+              Facebook
+            </a>
+            <a
+              href="#"
+              title="Instagram"
+              class="text-gray-500 hover:text-kem-yellow transition-colors text-lg"
+            >
+              Instagram
+            </a>
+            <a
+              href="#"
+              title="YouTube"
+              class="text-gray-500 hover:text-kem-yellow transition-colors text-lg"
+            >
+              YouTube
+            </a>
           </div>
           <p class="text-gray-600 text-xs">Fan-Projekt · Powered by Phoenix + Beacon CMS</p>
         </div>

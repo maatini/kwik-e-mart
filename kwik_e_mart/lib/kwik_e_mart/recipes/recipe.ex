@@ -22,7 +22,18 @@ defmodule KwikEMart.Recipes.Recipe do
   end
 
   @required [:title]
-  @optional [:description, :ingredients, :instructions, :prep_time, :difficulty, :servings, :image_url, :tags, :seasonal, :category_id]
+  @optional [
+    :description,
+    :ingredients,
+    :instructions,
+    :prep_time,
+    :difficulty,
+    :servings,
+    :image_url,
+    :tags,
+    :seasonal,
+    :category_id
+  ]
   @valid_difficulties ~w(leicht mittel schwer)
 
   def changeset(recipe, attrs) do
@@ -30,7 +41,9 @@ defmodule KwikEMart.Recipes.Recipe do
     |> cast(attrs, @required ++ @optional)
     |> validate_required(@required)
     |> validate_number(:prep_time, greater_than: 0)
-    |> validate_inclusion(:difficulty, @valid_difficulties, message: "muss leicht, mittel oder schwer sein")
+    |> validate_inclusion(:difficulty, @valid_difficulties,
+      message: "muss leicht, mittel oder schwer sein"
+    )
     |> assoc_constraint(:category)
   end
 end

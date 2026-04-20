@@ -142,9 +142,10 @@ defmodule KwikEMart.MarketsTest do
       {:ok, _} = Markets.create_market(@valid_attrs)
       # München liegt ~600 km von Hamburg entfernt
       results = Markets.find_nearby_markets(48.1351, 11.5820, 10)
+
       assert Enum.all?(results, fn m ->
-        m.latitude != 53.5503 or m.longitude != 10.0006
-      end)
+               m.latitude != 53.5503 or m.longitude != 10.0006
+             end)
     end
 
     test "ignoriert Märkte ohne Koordinaten" do

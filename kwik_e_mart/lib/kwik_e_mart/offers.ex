@@ -119,8 +119,16 @@ defmodule KwikEMart.Offers do
     rows =
       content
       |> KwikEMart.Offers.CSV.parse_string(skip_headers: true)
-      |> Enum.map(fn [title, description, price, original_price, discount_percent,
-                      category_slug, featured, image_url] ->
+      |> Enum.map(fn [
+                       title,
+                       description,
+                       price,
+                       original_price,
+                       discount_percent,
+                       category_slug,
+                       featured,
+                       image_url
+                     ] ->
         %{
           title: title,
           description: description,
@@ -159,7 +167,11 @@ defmodule KwikEMart.Offers do
 
       {:error, {:offer, idx}, changeset, _changes} ->
         row_title = rows |> Enum.at(idx) |> Map.get(:title, "?")
-        Logger.warning("[KwikEMart] Import fehlgeschlagen bei '#{row_title}': #{inspect(changeset.errors)}")
+
+        Logger.warning(
+          "[KwikEMart] Import fehlgeschlagen bei '#{row_title}': #{inspect(changeset.errors)}"
+        )
+
         {:error, changeset}
     end
   end
@@ -180,15 +192,19 @@ defmodule KwikEMart.Offers do
 
   defp get_category_id_by_slug(slug) when is_binary(slug) and slug != "" do
     case Repo.get_by(Category, slug: slug, type: "offer") do
-      %Category{id: id} -> id
+      %Category{id: id} ->
+        id
+
       nil ->
         Logger.warning("[KwikEMart] Kategorie '#{slug}' nicht gefunden - Angebot ohne Kategorie")
         nil
     end
   end
+
   defp get_category_id_by_slug(_), do: nil
 
   defp parse_decimal(""), do: nil
+
   defp parse_decimal(s) do
     case Decimal.parse(String.trim(s)) do
       {d, ""} -> d
@@ -197,6 +213,7 @@ defmodule KwikEMart.Offers do
   end
 
   defp parse_integer(""), do: nil
+
   defp parse_integer(s) do
     case Integer.parse(String.trim(s)) do
       {i, _} -> i

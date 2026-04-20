@@ -18,29 +18,31 @@ defmodule KwikEMartWeb.RecipeTeaserComponent do
       </div>
       <div class="p-4 flex flex-col flex-1">
         <%= if @recipe.category do %>
-          <p class="recipe-card-category"><%= @recipe.category.name %></p>
+          <p class="recipe-card-category">{@recipe.category.name}</p>
         <% end %>
-        <h3 class="recipe-card-title mb-1"><%= @recipe.title %></h3>
-        <p class="text-sm text-gray-600 mb-3 line-clamp-2"><%= @recipe.description %></p>
+        <h3 class="recipe-card-title mb-1">{@recipe.title}</h3>
+        <p class="text-sm text-gray-600 mb-3 line-clamp-2">{@recipe.description}</p>
         <div class="recipe-card-meta mb-3">
           <%= if @recipe.prep_time do %>
-            <span>⏱ <%= @recipe.prep_time %> Min.</span>
+            <span>⏱ {@recipe.prep_time} Min.</span>
           <% end %>
           <%= if @recipe.difficulty do %>
             <span>·</span>
-            <span><%= @recipe.difficulty %></span>
+            <span>{@recipe.difficulty}</span>
           <% end %>
           <%= if @recipe.servings do %>
             <span>·</span>
-            <span><%= @recipe.servings %> Portionen</span>
+            <span>{@recipe.servings} Portionen</span>
           <% end %>
         </div>
         <div class="flex flex-wrap gap-1 mb-2">
           <%= for tag <- Enum.take(@recipe.tags, 3) do %>
-            <span class="recipe-card-tag">#<%= tag %></span>
+            <span class="recipe-card-tag">#{tag}</span>
           <% end %>
         </div>
-        <.link navigate={~p"/rezepte/live/#{@recipe.id}"} class="recipe-card-mehr">Mehr erfahren →</.link>
+        <.link navigate={~p"/rezepte/live/#{@recipe.id}"} class="recipe-card-mehr">
+          Mehr erfahren →
+        </.link>
       </div>
     </div>
     """

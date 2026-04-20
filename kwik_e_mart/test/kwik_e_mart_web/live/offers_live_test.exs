@@ -45,7 +45,9 @@ defmodule KwikEMartWeb.OffersLiveTest do
   test "Kategorie-Filter schränkt Angebote ein", %{conn: conn, category: cat, offer: offer} do
     {:ok, lv, _html} = live(conn, ~p"/angebote/live")
 
-    html = lv |> element("[phx-click='filter_category'][phx-value-id='#{cat.id}']") |> render_click()
+    html =
+      lv |> element("[phx-click='filter_category'][phx-value-id='#{cat.id}']") |> render_click()
+
     assert html =~ offer.title
   end
 

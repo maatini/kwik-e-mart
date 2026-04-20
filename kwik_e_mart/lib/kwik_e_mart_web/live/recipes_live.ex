@@ -51,7 +51,11 @@ defmodule KwikEMartWeb.RecipesLive do
         assign(socket, recipes: recipes, selected_category: cat_id_int, show_seasonal_only: false)
 
       _ ->
-        assign(socket, recipes: Recipes.list_recipes(), selected_category: nil, show_seasonal_only: false)
+        assign(socket,
+          recipes: Recipes.list_recipes(),
+          selected_category: nil,
+          show_seasonal_only: false
+        )
     end
   end
 
@@ -61,7 +65,11 @@ defmodule KwikEMartWeb.RecipesLive do
   end
 
   defp apply_filters(socket, _params) do
-    assign(socket, recipes: Recipes.list_recipes(), selected_category: nil, show_seasonal_only: false)
+    assign(socket,
+      recipes: Recipes.list_recipes(),
+      selected_category: nil,
+      show_seasonal_only: false
+    )
   end
 
   @impl true
@@ -83,13 +91,23 @@ defmodule KwikEMartWeb.RecipesLive do
         <div class="flex gap-2 overflow-x-auto pb-1">
           <button
             phx-click="reset_filter"
-            class={if(@selected_category == nil && !@show_seasonal_only, do: "filter-pill filter-pill-active", else: "filter-pill filter-pill-inactive")}
+            class={
+              if(@selected_category == nil && !@show_seasonal_only,
+                do: "filter-pill filter-pill-active",
+                else: "filter-pill filter-pill-inactive"
+              )
+            }
           >
             Alle Rezepte
           </button>
           <button
             phx-click="toggle_seasonal"
-            class={if(@show_seasonal_only, do: "filter-pill filter-pill-active", else: "filter-pill filter-pill-inactive")}
+            class={
+              if(@show_seasonal_only,
+                do: "filter-pill filter-pill-active",
+                else: "filter-pill filter-pill-inactive"
+              )
+            }
           >
             🌸 Saisonal
           </button>
@@ -97,9 +115,14 @@ defmodule KwikEMartWeb.RecipesLive do
             <button
               phx-click="filter_category"
               phx-value-id={cat.id}
-              class={if(@selected_category == cat.id, do: "filter-pill filter-pill-active", else: "filter-pill filter-pill-inactive")}
+              class={
+                if(@selected_category == cat.id,
+                  do: "filter-pill filter-pill-active",
+                  else: "filter-pill filter-pill-inactive"
+                )
+              }
             >
-              <%= cat.icon %> <%= cat.name %>
+              {cat.icon} {cat.name}
             </button>
           <% end %>
         </div>
@@ -122,22 +145,24 @@ defmodule KwikEMartWeb.RecipesLive do
               </div>
               <div class="recipe-card-body">
                 <%= if recipe.category do %>
-                  <p class="recipe-card-category"><%= recipe.category.icon %> <%= recipe.category.name %></p>
+                  <p class="recipe-card-category">{recipe.category.icon} {recipe.category.name}</p>
                 <% end %>
-                <h3 class="recipe-card-title"><%= recipe.title %></h3>
-                <p class="text-sm text-gray-600 mt-2 line-clamp-2"><%= recipe.description %></p>
+                <h3 class="recipe-card-title">{recipe.title}</h3>
+                <p class="text-sm text-gray-600 mt-2 line-clamp-2">{recipe.description}</p>
                 <div class="recipe-card-meta">
                   <%= if recipe.prep_time do %>
-                    <span>⏱ <%= recipe.prep_time %> Min.</span>
+                    <span>⏱ {recipe.prep_time} Min.</span>
                   <% end %>
                   <%= if recipe.ingredients do %>
-                    <span><%= length(recipe.ingredients) %> Zutaten</span>
+                    <span>{length(recipe.ingredients)} Zutaten</span>
                   <% end %>
                 </div>
                 <%= if recipe.tags && recipe.tags != [] do %>
                   <div class="mt-3 flex flex-wrap gap-1">
                     <%= for tag <- Enum.take(recipe.tags, 3) do %>
-                      <span class="bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded-full">#<%= tag %></span>
+                      <span class="bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded-full">
+                        #{tag}
+                      </span>
                     <% end %>
                   </div>
                 <% end %>

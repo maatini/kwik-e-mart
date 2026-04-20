@@ -115,7 +115,9 @@ defmodule KwikEMart.RecipesTest do
   describe "list_all_tags/0" do
     test "gibt alle eindeutigen Tags zurück" do
       {:ok, _} = Recipes.create_recipe(recipe_attrs(tags: ["spargel", "frühling"]))
-      {:ok, _} = Recipes.create_recipe(recipe_attrs(title: "Anderes", tags: ["sommer", "spargel"]))
+
+      {:ok, _} =
+        Recipes.create_recipe(recipe_attrs(title: "Anderes", tags: ["sommer", "spargel"]))
 
       tags = Recipes.list_all_tags()
       assert "spargel" in tags

@@ -6,7 +6,8 @@ defmodule KwikEMartWeb.RecipeDetailLiveTest do
   alias KwikEMart.{Offers, Recipes}
 
   setup do
-    {:ok, cat} = Offers.create_category(%{name: "Apus Küche", slug: "apus-kueche-rd", type: "recipe"})
+    {:ok, cat} =
+      Offers.create_category(%{name: "Apus Küche", slug: "apus-kueche-rd", type: "recipe"})
 
     {:ok, recipe} =
       Recipes.create_recipe(%{

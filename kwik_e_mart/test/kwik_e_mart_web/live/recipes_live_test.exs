@@ -56,7 +56,9 @@ defmodule KwikEMartWeb.RecipesLiveTest do
   test "Kategorie-Filter zeigt nur Rezepte der Kategorie", %{conn: conn, category: cat} do
     {:ok, lv, _html} = live(conn, ~p"/rezepte/live")
 
-    html = lv |> element("[phx-click='filter_category'][phx-value-id='#{cat.id}']") |> render_click()
+    html =
+      lv |> element("[phx-click='filter_category'][phx-value-id='#{cat.id}']") |> render_click()
+
     assert html =~ "Tikka Masala"
     refute html =~ "Saisonales Gericht"
   end

@@ -22,7 +22,14 @@ defmodule KwikEMart.Offers.Offer do
   end
 
   @required [:title, :price, :valid_from, :valid_to]
-  @optional [:description, :original_price, :discount_percent, :image_url, :category_id, :market_id]
+  @optional [
+    :description,
+    :original_price,
+    :discount_percent,
+    :image_url,
+    :category_id,
+    :market_id
+  ]
 
   def changeset(offer, attrs) do
     offer

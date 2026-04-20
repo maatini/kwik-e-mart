@@ -20,6 +20,7 @@ defmodule KwikEMartWeb.MarketFinderLive do
   @impl true
   def handle_event("search", %{"query" => query}, socket) do
     results = Markets.search_markets(query)
+
     {:noreply,
      socket
      |> assign(query: query, results: results)
@@ -48,6 +49,7 @@ defmodule KwikEMartWeb.MarketFinderLive do
   @impl true
   def handle_event("use_location", %{"lat" => lat, "lng" => lng}, socket) do
     nearby = Markets.find_nearby_markets(lat, lng)
+
     {:noreply,
      socket
      |> assign(results: nearby)
@@ -78,15 +80,16 @@ defmodule KwikEMartWeb.MarketFinderLive do
     </div>
 
     <div class="max-w-2xl mx-auto px-4 sm:px-6 py-8">
-
       <%!-- Current market banner --%>
       <%= if @current_market do %>
         <div class="bg-kem-green/5 border border-kem-green rounded-2xl p-5 mb-6 flex items-center justify-between">
           <div>
-            <p class="text-xs font-bold text-kem-green uppercase tracking-wide mb-1">❤️ Dein Lieblingsmarkt</p>
-            <p class="font-bold text-gray-900 text-lg"><%= @current_market.name %></p>
+            <p class="text-xs font-bold text-kem-green uppercase tracking-wide mb-1">
+              ❤️ Dein Lieblingsmarkt
+            </p>
+            <p class="font-bold text-gray-900 text-lg">{@current_market.name}</p>
             <p class="text-sm text-gray-600">
-              <%= @current_market.street %>, <%= @current_market.zip %> <%= @current_market.city %>
+              {@current_market.street}, {@current_market.zip} {@current_market.city}
             </p>
           </div>
           <div class="w-10 h-10 rounded-full bg-kem-green flex items-center justify-center text-white text-xl shrink-0">
@@ -134,7 +137,8 @@ defmodule KwikEMartWeb.MarketFinderLive do
         phx-hook="LeafletMap"
         phx-update="ignore"
         class="w-full h-64 rounded-2xl overflow-hidden border border-gray-200 mb-6"
-      ></div>
+      >
+      </div>
 
       <%!-- Results --%>
       <div class="space-y-3">
@@ -147,15 +151,20 @@ defmodule KwikEMartWeb.MarketFinderLive do
             <div class="flex items-center justify-between">
               <div>
                 <p class="font-bold text-gray-900 group-hover:text-kem-green transition-colors">
-                  <%= market.name %>
+                  {market.name}
                 </p>
                 <p class="text-sm text-gray-500 mt-0.5">
-                  <%= market.street %>, <%= market.zip %> <%= market.city %>
+                  {market.street}, {market.zip} {market.city}
                 </p>
               </div>
               <div class="text-gray-300 group-hover:text-kem-green transition-colors shrink-0 ml-4">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 5l7 7-7 7"
+                  />
                 </svg>
               </div>
             </div>

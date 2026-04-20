@@ -34,7 +34,7 @@ defmodule KwikEMart.MixProject do
     [
       {:beacon_live_admin, "~> 0.4"},
       {:beacon, "~> 0.5"},
-{:igniter, "~> 0.6", only: [:dev, :test]},
+      {:igniter, "~> 0.6", only: [:dev, :test]},
       {:phoenix, "~> 1.7.14"},
       {:phoenix_ecto, "~> 4.5"},
       {:ecto_sql, "~> 3.10"},
@@ -63,7 +63,9 @@ defmodule KwikEMart.MixProject do
       {:bandit, "~> 1.5"},
       {:nimble_csv, "~> 1.3"},
       {:quantum, "~> 3.5"},
-      {:cachex, "~> 3.6"}
+      {:cachex, "~> 3.6"},
+      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}
     ]
   end
 
@@ -85,6 +87,17 @@ defmodule KwikEMart.MixProject do
         "tailwind kwik_e_mart --minify",
         "esbuild kwik_e_mart --minify",
         "phx.digest"
+      ],
+      quality: ["format", "credo --strict"],
+      check: ["quality", "dialyzer"]
+    ]
+  end
+
+  def releases do
+    [
+      kwik_e_mart: [
+        include_executables_for: [:unix],
+        applications: [runtime_tools: :permanent]
       ]
     ]
   end

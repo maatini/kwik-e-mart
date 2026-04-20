@@ -8,13 +8,18 @@ defmodule KwikEMartWeb.HomeLiveTest do
   setup do
     today = Date.utc_today()
 
-    {:ok, cat_offer} = Offers.create_category(%{name: "Getränke", slug: "getraenke-hl", type: "offer"})
-    {:ok, cat_recipe} = Recipes.list_categories() |> case do
-      [] ->
-        Offers.create_category(%{name: "Apus Küche", slug: "apus-kueche-hl", type: "recipe"})
-      [c | _] ->
-        {:ok, c}
-    end
+    {:ok, cat_offer} =
+      Offers.create_category(%{name: "Getränke", slug: "getraenke-hl", type: "offer"})
+
+    {:ok, cat_recipe} =
+      Recipes.list_categories()
+      |> case do
+        [] ->
+          Offers.create_category(%{name: "Apus Küche", slug: "apus-kueche-hl", type: "recipe"})
+
+        [c | _] ->
+          {:ok, c}
+      end
 
     {:ok, offer} =
       Offers.create_offer(%{
